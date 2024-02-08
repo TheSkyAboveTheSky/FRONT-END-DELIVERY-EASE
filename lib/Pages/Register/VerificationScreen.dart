@@ -166,7 +166,8 @@ class VerificationScreenState extends State<VerificationScreen> {
                     duration: const Duration(milliseconds: 500),
                     child: VerificationCode(
                       length: 4,
-                      textStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                      textStyle:
+                          const TextStyle(fontSize: 20, color: Colors.black),
                       underlineColor: Colors.black,
                       keyboardType: TextInputType.number,
                       underlineUnfocusedColor: Colors.black,
