@@ -82,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               width: 20,
                               height:20,
-                              child: Image(image: AssetImage("assets/images/icon_gmail_3.png")),
+                              child:
+                              Image(image: AssetImage("assets/images/icon_gmail_3.png")),
                             ),
                             const SizedBox(width: 5,),
                             const Text("ADRESS EMAIL" , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
@@ -176,7 +177,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],),
                 Image.asset("assets/images/livraison_rapide.png", width: 40,)
               ],), )
-
             ]
           ),
         ),

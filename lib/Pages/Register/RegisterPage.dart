@@ -18,39 +18,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        backgroundColor: MyAppColors.backgroundColor ,
-        body: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    SizedBox(height: 40,),
-                    FadeInDown(child: Image(image: AssetImage("assets/images/image_register.png"))) ,
-                    SizedBox(height: 20,),
-                    Center(
-                      child: Container(
-                          width: MediaQuery.of(context).size.width * 2.5/ 3,
-                          decoration: BoxDecoration(
-                          ),
-                          child: Column(
-                            children: [
-                              Text(title.toUpperCase(),  textAlign: TextAlign.center,style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold , fontSize: 13, fontFamily: "Cairo"),),
-                            ],
-                          )),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 2/3,
-                      height: 2,
-                      decoration: BoxDecoration(
+    return Scaffold(
+      backgroundColor: MyAppColors.backgroundColor ,
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  SizedBox(height: 40,),
+                  FadeInDown(child: Image(image: AssetImage("assets/images/image_register.png"))) ,
+                  SizedBox(height: 20,),
+                  Center(
+                    child: Container(
+                        width: MediaQuery.of(context).size.width * 2.5/ 3,
+                        decoration: BoxDecoration(
+                        ),
+                        child: Column(
+                          children: [
+                            Text(title.toUpperCase(),  textAlign: TextAlign.center,style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold , fontSize: 13, fontFamily: "Cairo"),),
+                          ],
+                        )),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 2/3,
+                    height: 2,
+                    decoration: BoxDecoration(
                         color: MyAppColors.whiteCardColor
-                      ),
                     ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       FadeInLeft(child: GestureDetector(
                         onTap: () => {
                           Navigator.push(
@@ -113,19 +113,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),)
                     ],),
-                    SizedBox(height: 40,),
-                    Container(
-                          child: Center(
-                              child : Image.asset("assets/images/livraison_rapide.png" , width: 50,)
-                          ),
-                        ),
-                  ],
-                )
-              ],
-            ),
+                  SizedBox(height: 40,),
+                  Container(
+                    child: Center(
+                        child : Image.asset("assets/images/livraison_rapide.png" , width: 50,)
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
 }
