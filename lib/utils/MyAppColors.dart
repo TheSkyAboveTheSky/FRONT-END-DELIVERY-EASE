@@ -22,6 +22,4 @@ class MyAppColors {
       255, 56, 0, 0.5019607843137255);
   static const Color orangeLight2 = Color.fromRGBO(
       255, 56, 0, 0.2019607843137255);
-
-// Ajoutez d'autres couleurs selon vos besoins
 }

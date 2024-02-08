@@ -30,7 +30,7 @@ class _ColieFormState extends State<ColieForm> {
 
     // Afficher un message de confirmation
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Colie enregistré avec succès !')),
+      const SnackBar(content: Text('Colie enregistré avec succès !')),
     );
   }
 
@@ -45,13 +45,13 @@ class _ColieFormState extends State<ColieForm> {
             children: [
               Row(children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
-                      boxShadow: [MyAppBoxShadow.boxShadowSecond]
+                      boxShadow: const [MyAppBoxShadow.boxShadowSecond]
                   ),
-                  child: Row( mainAxisAlignment : MainAxisAlignment.center , crossAxisAlignment:CrossAxisAlignment.center ,
+                  child: const Row( mainAxisAlignment : MainAxisAlignment.center , crossAxisAlignment:CrossAxisAlignment.center ,
                     children: [
                     Image(image: AssetImage("assets/images/icon_back_2.png"),width: 15,),
                     SizedBox(width: 4,),
@@ -59,18 +59,18 @@ class _ColieFormState extends State<ColieForm> {
                   ],)
                 )
               ],),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 color: MyAppColors.orangeLight2,
                 height: 1,
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Row(children: [
-                Image(image: AssetImage("assets/images/icon_flash.png"),width: 25,),
+                const Image(image: AssetImage("assets/images/icon_flash.png"),width: 25,),
                 Text("Merci de saisir les informations de la colie".toUpperCase(),
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily: "Cairo",fontSize: 13),)
+                  style: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily: "Cairo",fontSize: 13),)
               ],),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
 
               // INPUTS  INSIDE CUPERTINO  AND LABELS INSIDE PADDING !
               Padding(
@@ -80,24 +80,24 @@ class _ColieFormState extends State<ColieForm> {
                     Container(
                       width: 20,
                       height:20,
-                      child: Image(image: AssetImage("assets/images/icon_addresse_expedition.png")),
+                      child: const Image(image: AssetImage("assets/images/icon_addresse_expedition.png")),
                     ),
                     const SizedBox(width: 5,),
-                    Text("Address d'\expedition".toUpperCase() , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
+                    Text("Address d'\expedition".toUpperCase() , textAlign: TextAlign.left , style: const TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
                   ],
                 ),
               ),
               const SizedBox(height: 10,),
               CupertinoTextField(
-                style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                 placeholder: 'Address d expedition de la colie',
-                placeholderStyle: TextStyle(color: Color.fromRGBO(
+                placeholderStyle: const TextStyle(color: Color.fromRGBO(
                     103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
                   color: MyAppColors.whiteCardColor,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
+                  boxShadow: const [
                     MyAppBoxShadow.boxShadowSecond
                   ],
                 ),
@@ -110,29 +110,29 @@ class _ColieFormState extends State<ColieForm> {
                     Container(
                       width: 20,
                       height:20,
-                      child: Image(image: AssetImage("assets/images/icon_addresse_destination.png")),
+                      child: const Image(image: AssetImage("assets/images/icon_addresse_destination.png")),
                     ),
                     const SizedBox(width: 5,),
-                    Text("Address de destination".toUpperCase(), textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
+                    Text("Address de destination".toUpperCase(), textAlign: TextAlign.left , style: const TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
                   ],
                 ),
               ),
               const SizedBox(height: 10,),
               CupertinoTextField(
-                style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                 placeholder: 'Address d expedition de la colie',
-                placeholderStyle: TextStyle(color: Color.fromRGBO(
+                placeholderStyle: const TextStyle(color: Color.fromRGBO(
                     103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
                   color: MyAppColors.whiteCardColor,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
+                  boxShadow: const [
                     MyAppBoxShadow.boxShadowSecond
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Row(
@@ -140,31 +140,31 @@ class _ColieFormState extends State<ColieForm> {
                     Container(
                       width: 20,
                       height:20,
-                      child: Image(image: AssetImage("assets/images/icon_addresse_destination.png")),
+                      child: const Image(image: AssetImage("assets/images/icon_addresse_destination.png")),
                     ),
                     const SizedBox(width: 5,),
-                    Text("Address de destination".toUpperCase(), textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
+                    Text("Address de destination".toUpperCase(), textAlign: TextAlign.left , style: const TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
                   ],
                 ),
               ),
               const SizedBox(height: 10,),
               CupertinoTextField(
-                style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                 placeholder: 'Address d expedition de la colie',
-                placeholderStyle: TextStyle(color: Color.fromRGBO(
+                placeholderStyle: const TextStyle(color: Color.fromRGBO(
                     103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
                   color: MyAppColors.whiteCardColor,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
+                  boxShadow: const [
                     MyAppBoxShadow.boxShadowSecond
                   ],
                 ),
               ),
               ElevatedButton(
                 onPressed: _envoyer,
-                child: Text('Envoyer'),
+                child: const Text('Envoyer'),
               ),
             ],
           ),
