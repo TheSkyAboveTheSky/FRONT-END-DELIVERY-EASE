@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:deliver_ease/Pages/Register/VerificationScreen.dart';
+import 'package:deliver_ease/Pages/Register/Phone.dart';
 import 'package:deliver_ease/main.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/material.dart';
+
 
 class RegisterPage extends StatefulWidget {
 
@@ -55,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTap: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => VerificationScreen()),
+                            MaterialPageRoute(builder: (context) => PhoneForm()),
                           )
                         },
                         child: Container(
