@@ -43,7 +43,7 @@ class _RegisterFormState extends State<RegisterForm> {
                            Container(
                              height: 120,
                              width: 120,
-                             padding: EdgeInsets.all(2),
+                             padding: const EdgeInsets.all(2),
                              decoration: BoxDecoration(
                                border: Border.all(color: Colors.deepOrange),
                                borderRadius: BorderRadius.circular(60),
@@ -64,7 +64,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                child: Container(
                                  width: 36,
                                  height: 36,
-                                 padding: EdgeInsets.all(2),
+                                 padding: const EdgeInsets.all(2),
                                  decoration: BoxDecoration(
                                      color: MyAppColors.backgroundColor,
                                      borderRadius: BorderRadius.circular(18),
@@ -74,7 +74,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                  child: Container(
                                      width: 36,
                                      height: 36,
-                                     padding: EdgeInsets.all(2),
+                                     padding: const EdgeInsets.all(2),
                                      decoration: BoxDecoration(
                                          color: Colors.deepOrange,
                                          borderRadius: BorderRadius.circular(14),
@@ -92,7 +92,7 @@ class _RegisterFormState extends State<RegisterForm> {
                  const SizedBox(height: 20),
                  Text(
                    "Choisir une photo de profile".toUpperCase(),
-                   style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontFamily: "Cairo"),
+                   style: const TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontFamily: "Cairo"),
                  ),
                ]),),
                FadeInUp(child: Column(children : [
@@ -105,7 +105,7 @@ class _RegisterFormState extends State<RegisterForm> {
                  const SizedBox(height: 40,),
                  Container(
                    width: double.infinity,
-                   padding: EdgeInsets.symmetric(horizontal: 10),
+                   padding: const EdgeInsets.symmetric(horizontal: 10),
                    child: Column(
                      crossAxisAlignment: CrossAxisAlignment.start,
                      children: [
@@ -116,20 +116,20 @@ class _RegisterFormState extends State<RegisterForm> {
                              Container(
                                width: 20,
                                height:20,
-                               child: Image(image: AssetImage("assets/images/nom_icon.png")),
+                               child: const Image(image: AssetImage("assets/images/nom_icon.png")),
                              ),
                              const SizedBox(width: 5,),
-                             Text("Nom et Prenom".toUpperCase() , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
+                             Text("Nom et Prenom".toUpperCase() , textAlign: TextAlign.left , style: const TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
                            ],
                          ),
                        ),
                        const SizedBox(height: 10,),
                        CupertinoTextField(
-                         style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                         style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                          placeholder: 'Votre nom complet',
-                         placeholderStyle: TextStyle(color: Color.fromRGBO(
+                         placeholderStyle: const TextStyle(color: Color.fromRGBO(
                              103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                          decoration: BoxDecoration(
                            color: MyAppColors.whiteCardColor,
                            borderRadius: BorderRadius.circular(8),
@@ -146,7 +146,7 @@ class _RegisterFormState extends State<RegisterForm> {
                              Container(
                                width: 20,
                                height:20,
-                               child: Image(image: AssetImage("assets/images/icon_gmail_3.png")),
+                               child: const Image(image: AssetImage("assets/images/icon_gmail_3.png")),
                              ),
                              const SizedBox(width: 5,),
                              const Text("YOUR EMAIL" , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
@@ -155,11 +155,11 @@ class _RegisterFormState extends State<RegisterForm> {
                        ),
                        const SizedBox(height: 10,),
                        CupertinoTextField(
-                         style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                         style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                          placeholder: 'Ayoubseddiki132@gmail.com',
-                         placeholderStyle: TextStyle(color: Color.fromRGBO(
+                         placeholderStyle: const TextStyle(color: Color.fromRGBO(
                              103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                          decoration: BoxDecoration(
                            color: MyAppColors.whiteCardColor,
                            borderRadius: BorderRadius.circular(8),
@@ -176,7 +176,7 @@ class _RegisterFormState extends State<RegisterForm> {
                              Container(
                                width: 20,
                                height:20,
-                               child: Image(image: AssetImage("assets/images/icon_password.png")),
+                               child: const Image(image: AssetImage("assets/images/icon_password.png")),
                              ),
                              const SizedBox(width: 5,),
                              const Text("YOUR PASSWORD" , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
@@ -185,11 +185,11 @@ class _RegisterFormState extends State<RegisterForm> {
                        ),
                        const SizedBox(height: 10,),
                        CupertinoTextField(
-                         style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                         style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                          placeholder: '*******',
-                         placeholderStyle: TextStyle(color: Color.fromRGBO(
+                         placeholderStyle: const TextStyle(color: Color.fromRGBO(
                              103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                          decoration: BoxDecoration(
                            color: MyAppColors.whiteCardColor,
                            borderRadius: BorderRadius.circular(8),
@@ -203,14 +203,14 @@ class _RegisterFormState extends State<RegisterForm> {
                  ),
                  const SizedBox(height: 20,),
                  Container(
-                   padding: EdgeInsets.symmetric(horizontal: 10),
+                   padding: const EdgeInsets.symmetric(horizontal: 10),
                    width: double.infinity,
                    child :   MaterialButton(
                      onPressed: (){},
                      height: 60,
                      color: Colors.deepOrange,
-                     child: Text("Register".toUpperCase(), style: TextStyle(color: Colors.white, fontSize: 13.0,fontWeight: FontWeight.bold, fontFamily: "Cairo"),),
-                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                     child: Text("Register".toUpperCase(), style: const TextStyle(color: Colors.white, fontSize: 13.0,fontWeight: FontWeight.bold, fontFamily: "Cairo"),),
+                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                      shape: RoundedRectangleBorder(
                        borderRadius: BorderRadius.circular(10.0),
                      ),
@@ -221,17 +221,17 @@ class _RegisterFormState extends State<RegisterForm> {
                  Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
-                     Text(
+                     const Text(
                        "Vous avez déjà un compte ?", style: TextStyle(fontWeight: FontWeight.w500,fontFamily: "Cairo"),
                      ),
                      TextButton(
                        onPressed: () {
                          Navigator.push(
                            context,
-                           MaterialPageRoute(builder: (context) => LoginPage()),
+                           MaterialPageRoute(builder: (context) => const LoginPage()),
                          );
                        },
-                       child: Text(
+                       child: const Text(
                          "Cliquez ici",
                          style: TextStyle(
                              color: Colors.deepOrange,

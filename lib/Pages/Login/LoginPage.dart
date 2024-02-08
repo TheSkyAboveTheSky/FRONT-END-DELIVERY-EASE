@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(children: [
                       Image.asset('assets/images/logo2.png',width: 150,),
                       const SizedBox(height: 10,),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("DELIVER " , style: TextStyle(fontFamily: 'Cairo',fontWeight: FontWeight.w700 , fontSize: 23),),
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         width: double.infinity,
                         height: 1,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: MyAppColors.orangeLight
                         ),
                       ),
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20,),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -83,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                               width: 20,
                               height:20,
                               child:
-                              Image(image: AssetImage("assets/images/icon_gmail_3.png")),
+                              const Image(image: AssetImage("assets/images/icon_gmail_3.png")),
                             ),
                             const SizedBox(width: 5,),
                             const Text("ADRESS EMAIL" , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
@@ -92,15 +94,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 10,),
                       CupertinoTextField(
-                        style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                        style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                         placeholder: 'Ayoubseddiki132@gmail.com',
-                        placeholderStyle: TextStyle(color: Color.fromRGBO(
+                        placeholderStyle: const TextStyle(color: Color.fromRGBO(
                             103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                         decoration: BoxDecoration(
                           color: MyAppColors.whiteCardColor,
                           borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
+                          boxShadow: const [
                             MyAppBoxShadow.boxShadowSecond
                           ],
                         ),
@@ -113,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               width: 20,
                               height:20,
-                              child: Image(image: AssetImage("assets/images/icon_password.png")),
+                              child: const Image(image: AssetImage("assets/images/icon_password.png")),
                             ),
                             const SizedBox(width: 5,),
                             const Text("MOT DE PASSE" , textAlign: TextAlign.left , style: TextStyle(color: MyAppColors.blackColor , fontWeight: FontWeight.bold , fontFamily: "Cairo" , fontSize: 12),),
@@ -122,15 +124,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 10,),
                       CupertinoTextField(
-                        style: TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
+                        style: const TextStyle(color: Colors.black , fontFamily: "Nunito" , fontSize: 13),
                         placeholder: '*******',
-                        placeholderStyle: TextStyle(color: Color.fromRGBO(
+                        placeholderStyle: const TextStyle(color: Color.fromRGBO(
                             103, 103, 103, 0.7333333333333333) , fontSize: 13),
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                         decoration: BoxDecoration(
                           color: MyAppColors.whiteCardColor,
                           borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
+                          boxShadow: const [
                             MyAppBoxShadow.boxShadowSecond
                           ],
                         ),
@@ -140,14 +142,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20,),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: double.infinity,
                   child :   MaterialButton(
                     onPressed: (){},
                     height: 60,
                     color: Colors.deepOrange,
-                    child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 16.0),),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                    child: const Text("Login", style: TextStyle(color: Colors.white, fontSize: 16.0),),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -156,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Vous n'avez encore creer un compte ?", style: TextStyle(fontWeight: FontWeight.w500,fontFamily: "Cairo"),
                     ),
                     TextButton(
@@ -166,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(builder: (context) => RegisterPage()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Cliquez ici",
                         style: TextStyle(
                             color: Colors.deepOrange,

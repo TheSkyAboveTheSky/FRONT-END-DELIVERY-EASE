@@ -27,12 +27,12 @@ class MyAppBoxShadow {
                                             blurRadius: 0,
                                             spreadRadius: 1,
                                           );
-  static final BoxShadow boxShadowFive = BoxShadow(
+  static const BoxShadow boxShadowFive = BoxShadow(
                                           color: Color.fromRGBO(17, 17, 26, 0.1),
                                           offset: Offset(0, 1),
                                           blurRadius: 0,
                                         );
-  static final BoxShadow boxShadowSix = BoxShadow(
+  static const BoxShadow boxShadowSix = BoxShadow(
                                           color: Color.fromRGBO(100, 100, 111, 0.2),
                                           offset: Offset(0, 7),
                                           blurRadius: 29,
