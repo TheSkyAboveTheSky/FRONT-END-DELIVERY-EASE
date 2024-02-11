@@ -5,6 +5,9 @@ import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:deliver_ease/Pages/Profle/profile.dart';
+import 'package:deliver_ease/Models/login_request_model.dart';
+import 'package:deliver_ease/Services/api_service.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,6 +17,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isApiCallProcess = false;
+  String? email;
+  String? password;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,14 +153,16 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       CupertinoTextField(
                         style: const TextStyle(
-                            color: Colors.black,
-                            fontFamily: "Nunito",
-                            fontSize: 13),
-                        placeholder: 'Ayoubseddiki132@gmail.com',
+                          color: Colors.black,
+                          fontFamily: "Nunito",
+                          fontSize: 13,
+                        ),
+                        placeholder: 'saidmounji@gmail.com',
                         placeholderStyle: const TextStyle(
-                            color: Color.fromRGBO(
-                                103, 103, 103, 0.7333333333333333),
-                            fontSize: 13),
+                          color:
+                              Color.fromRGBO(103, 103, 103, 0.7333333333333333),
+                          fontSize: 13,
+                        ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 20),
                         decoration: BoxDecoration(
@@ -156,6 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: const [MyAppBoxShadow.boxShadowSecond],
                         ),
+                        onChanged: (value) {
+                          email = value;
+                        },
                       ),
                       const SizedBox(
                         height: 10,
@@ -206,6 +223,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: const [MyAppBoxShadow.boxShadowSecond],
                         ),
+                        onChanged: (value) {
+                          password = value;
+                        },
                       ),
                     ],
                   ),
@@ -218,21 +238,44 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()),
-                      );
+                      if (validateAndSave()) {
+                        setState(() {
+                          isApiCallProcess = true;
+                        });
+                        LoginRequestModel model = LoginRequestModel(
+                          email: email,
+                          password: password,
+                        );
+
+                        APIService.login(model).then((response) {
+                          setState(() {
+                            isApiCallProcess = false;
+                          });
+                          if (response) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage()),
+                            );
+                          } else {
+                            FormHelper.showSimpleAlertDialog(context, "Erreur",
+                                "Email ou mot de passe incorrect", "OK", () {
+                              Navigator.of(context).pop();
+                            });
+                          }
+                        });
+                      }
                     },
                     height: 60,
                     color: Colors.deepOrange,
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
-                    ),
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
                     ),
                   ),
                 ),
@@ -273,5 +316,12 @@ class _LoginPageState extends State<LoginPage> {
         ]),
       ),
     );
+  }
+
+  bool validateAndSave() {
+    if (email!.isEmpty || password!.isEmpty) {
+      return false;
+    }
+    return true;
   }
 }
