@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'shared_service.dart';
-import 'package:deliver_ease/Models/login_response_model.dart';
-import 'package:deliver_ease/Models/login_request_model.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 
 class APIService {
   static var client = http.Client();
-  static const String apiURL = 'http://localhost:8093/api/v1/';
+  static const String apiURL = 'http://10.220.6.133:8093/api/v1/';
   static const String loginURL = 'auth/authenticate';
 
   static Future<bool> login(LoginRequestModel model) async {

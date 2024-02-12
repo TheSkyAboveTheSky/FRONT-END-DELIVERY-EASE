@@ -1,14 +1,24 @@
 import 'dart:convert';
-
-import 'package:deliver_ease/Models/login_response_model.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SharedService {
   static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
-  static Future<bool> isLoggedIn() async {
+  static final String secretKey =
+      '404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970';
 
+  static Future<bool> isAuthenticated() async {
+    String? jsonString = await _secureStorage.read(key: "login_details");
+    if (jsonString != null) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> isLoggedIn() async {
     return await _secureStorage.containsKey(key: "login_details");
   }
 

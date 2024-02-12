@@ -5,9 +5,11 @@ import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:deliver_ease/Pages/Profle/profile.dart';
-import 'package:deliver_ease/Models/login_request_model.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,8 +26,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _checkAuthentication();
   }
 
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/menu');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

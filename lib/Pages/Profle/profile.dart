@@ -1,9 +1,8 @@
-import 'package:deliver_ease/Widgets/button_widget.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
-import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -20,6 +19,14 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
+    _checkAuthentication();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (!isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override
