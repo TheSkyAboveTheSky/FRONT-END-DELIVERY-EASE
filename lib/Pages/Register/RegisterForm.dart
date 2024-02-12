@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
@@ -8,6 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
+import 'package:deliver_ease/Pages/Profle/profile.dart';
+import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Services/api_service.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -19,6 +22,10 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   // Image picker
   final ImagePicker _picker = ImagePicker();
+  bool isApiCallProcess = false;
+  String? name;
+  String? email;
+  String? password;
 
   XFile? _imageFile;
   @override
@@ -176,6 +183,9 @@ class _RegisterFormState extends State<RegisterForm> {
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: [MyAppBoxShadow.boxShadowSecond],
                             ),
+                            onChanged: (value) {
+                              name = value;
+                            },
                           ),
                           const SizedBox(
                             height: 10,
@@ -227,6 +237,9 @@ class _RegisterFormState extends State<RegisterForm> {
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: [MyAppBoxShadow.boxShadowSecond],
                             ),
+                            onChanged: (value) {
+                              email = value;
+                            },
                           ),
                           const SizedBox(
                             height: 10,
@@ -278,6 +291,9 @@ class _RegisterFormState extends State<RegisterForm> {
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: [MyAppBoxShadow.boxShadowSecond],
                             ),
+                            onChanged: (value) {
+                              password = value;
+                            },
                           ),
                         ],
                       ),
@@ -289,7 +305,40 @@ class _RegisterFormState extends State<RegisterForm> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       width: double.infinity,
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (validateAndSave()) {
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+                            RegisterRequestModel model = RegisterRequestModel(
+                              email: email,
+                              password: password,
+                              firstName: name,
+                              lastName: name,
+                              role: "SENDER",
+                            );
+                            APIService.register(model).then((response) {
+                              setState(() {
+                                isApiCallProcess = false;
+                              });
+                              if (response) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginPage()),
+                                );
+                              } else {
+                                FormHelper.showSimpleAlertDialog(
+                                    context,
+                                    "Erreur",
+                                    "Email ou mot de passe ou nom incorrect",
+                                    "OK", () {
+                                  Navigator.of(context).pop();
+                                });
+                              }
+                            });
+                          }
+                        },
                         height: 60,
                         color: Colors.deepOrange,
                         child: Text(
@@ -351,6 +400,11 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  // Fonction d'envoi de la photo (à implémenter selon votre logique)
   void _uploadPhoto() {}
+  bool validateAndSave() {
+    if (email!.isEmpty || password!.isEmpty || name!.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 }

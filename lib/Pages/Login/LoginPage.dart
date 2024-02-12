@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:deliver_ease/Pages/Register/RegisterPage.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +8,7 @@ import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
+import 'package:deliver_ease/Pages/Register/RegisterForm.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -273,7 +273,9 @@ class _LoginPageState extends State<LoginPage> {
                             });
                           }
                         });
+                      
                       }
+                    
                     },
                     height: 60,
                     color: Colors.deepOrange,
@@ -301,7 +303,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterPage()),
+                              builder: (context) => RegisterForm()),
                         );
                       },
                       child: const Text(

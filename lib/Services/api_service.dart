@@ -7,6 +7,7 @@ class APIService {
   static var client = http.Client();
   static const String apiURL = 'http://10.220.6.133:8093/api/v1/';
   static const String loginURL = 'auth/authenticate';
+  static const String registerURL = 'auth/register';
 
   static Future<bool> login(LoginRequestModel model) async {
     Map<String, String> requestHeaders = {
@@ -36,4 +37,29 @@ class APIService {
       return false;
     }
   }
+    static Future<bool> register(RegisterRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    try {
+      var response = await client.post(
+        Uri.parse(apiURL + registerURL),
+        headers: requestHeaders,
+        body: jsonEncode(model.toJson()),
+      );
+      print(jsonEncode(model.toJson()));
+      print('Response: ${response.body}');
+      if (response.statusCode == 200) {
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error in Register: $e');
+      return false;
+    }
+  }
+
+
 }

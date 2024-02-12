@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
+import 'package:deliver_ease/Pages/Register/RegisterForm.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
