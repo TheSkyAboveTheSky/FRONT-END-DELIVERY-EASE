@@ -3,12 +3,10 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:deliver_ease/Config/config.dart';
 
 class SharedService {
   static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
-
-  static final String secretKey =
-      '404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970';
 
   static Future<bool> isAuthenticated() async {
     String? jsonString = await _secureStorage.read(key: "login_details");
