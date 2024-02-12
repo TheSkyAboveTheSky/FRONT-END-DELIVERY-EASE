@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:deliver_ease/Models/Enums/role.dart';
 
 class User {
   User({
@@ -11,13 +12,14 @@ class User {
   String? email;
   String? firstName;
   String? lastName;
-  String? role;
+  Role? role;
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
-    role = json['role'];
+    role = _parseRole(json['role']);
+    ;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,7 +27,7 @@ class User {
       'email': email,
       'firstName': firstName,
       'lastName': lastName,
-      'role': role,
+      'role': role?.toJsonString(),
     };
     return data;
   }
@@ -64,7 +66,7 @@ class LoginResponseModel {
 
   String? firstName;
   String? lastName;
-  String? role;
+  Role? role;
   int? id;
   String? token;
 
@@ -72,7 +74,7 @@ class LoginResponseModel {
     firstName = json['firstName'];
     lastName = json['lastName'];
     id = json['idUserAuthenticated'];
-    role = json['role'];
+    role = _parseRole(json['role']);
     token = json['token'];
   }
 
@@ -81,7 +83,7 @@ class LoginResponseModel {
       'firstName': firstName,
       'lastName': lastName,
       'id': id,
-      'role': role,
+      'role': role?.toJsonString(),
       'token': token,
     };
     return _data;
@@ -101,14 +103,15 @@ class RegisterRequestModel {
   String? password;
   String? firstName;
   String? lastName;
-  String? role;
+  Role? role;
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     password = json['password'];
     firstName = json['firstName'];
     lastName = json['lastName'];
-    role = json['role'];
+    role = _parseRole(json['role']);
+    ;
   }
 
   Map<String, dynamic> toJson() {
@@ -117,7 +120,7 @@ class RegisterRequestModel {
       'firstName': firstName,
       'lastName': lastName,
       'password': password,
-      'role': role,
+      'role': role?.toJsonString(),
     };
     return data;
   }
@@ -147,3 +150,19 @@ LoginResponseModel loginResponseJson(String str) =>
 
 RegisterResponseModel registerResponseJson(String str) =>
     RegisterResponseModel.fromJson(json.decode(str));
+
+Role? _parseRole(String? roleStr) {
+  if (roleStr == null) {
+    return null;
+  }
+  switch (roleStr.toUpperCase()) {
+    case 'ADMIN':
+      return Role.ADMIN;
+    case 'SENDER':
+      return Role.SENDER;
+    case 'DELIVERY_PERSON':
+      return Role.DELIVERY_PERSON;
+    default:
+      throw ArgumentError('Unknown Role: $roleStr');
+  }
+}

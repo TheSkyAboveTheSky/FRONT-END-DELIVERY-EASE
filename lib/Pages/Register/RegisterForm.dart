@@ -11,6 +11,7 @@ import 'package:deliver_ease/Pages/Profle/profile.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:deliver_ease/Models/Enums/role.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -315,7 +316,7 @@ class _RegisterFormState extends State<RegisterForm> {
                               password: password,
                               firstName: name,
                               lastName: name,
-                              role: "SENDER",
+                              role: Role.SENDER,
                             );
                             APIService.register(model).then((response) {
                               setState(() {
