@@ -10,7 +10,6 @@ class Colie {
     this.shippingAddress,
     this.description,
     this.status,
-    this.user,
   });
 
   int? id;
@@ -19,7 +18,6 @@ class Colie {
   Address? shippingAddress;
   String? description;
   Status? status;
-  User? user;
 
   Colie.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -28,7 +26,6 @@ class Colie {
     shippingAddress = Address.fromJson(json['shippingAddress']);
     description = json['description'];
     status = _parseStatus(json['status']);
-    user = User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
@@ -39,7 +36,6 @@ class Colie {
       'shippingAddress': shippingAddress?.toJson(),
       'description': description,
       'status': status?.toJsonString(),
-      'user': user?.toJson(),
     };
     return data;
   }

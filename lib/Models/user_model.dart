@@ -75,7 +75,7 @@ class LoginResponseModel {
     lastName = json['lastName'];
     id = json['idUserAuthenticated'];
     role = _parseRole(json['role']);
-    token = json['token'];
+    token = json['token'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -84,7 +84,7 @@ class LoginResponseModel {
       'lastName': lastName,
       'id': id,
       'role': role?.toJsonString(),
-      'token': token,
+      'token': token.toString(),
     };
     return _data;
   }

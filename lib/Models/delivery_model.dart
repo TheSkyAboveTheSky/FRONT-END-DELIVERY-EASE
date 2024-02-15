@@ -39,3 +39,23 @@ class Delivery {
   }
 
 }
+class DeliveryDemandeRequest {
+  DeliveryDemandeRequest({
+    required this.parcel,
+    required this.user,
+  });
+
+  Colie parcel;
+  User user;
+
+  factory DeliveryDemandeRequest.fromJson(Map<String, dynamic> json) =>
+      DeliveryDemandeRequest(
+        parcel: Colie.fromJson(json['parcel']),
+        user: User.fromJson(json['user']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'parcel': parcel.toJson(),
+        'user': user.toJson(),
+      };
+}

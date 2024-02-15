@@ -46,6 +46,37 @@ class Trajet {
     };
     return data;
   }
+}
 
+class RechercheTrajet {
+  RechercheTrajet({
+    this.departureCity,
+    this.arrivalCity,
+  });
 
+  City? departureCity;
+  City? arrivalCity;
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{
+      'departureAddress': departureCity?.toJson(),
+      'arrivalAddress': arrivalCity?.toJson(),
+    };
+    return data;
+  }
+}
+
+class City {
+  City({
+    this.city,
+  });
+
+  String? city;
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{
+      'city': city,
+    };
+    return data;
+  }
 }
