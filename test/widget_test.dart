@@ -1,30 +1,43 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mockito/mockito.dart';
+import 'package:http/http.dart' as http;
 import 'package:deliver_ease/main.dart';
+import 'package:deliver_ease/Services/api_service.dart';
+import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Config/config.dart';
+
+// Mocking the HTTP client
+class MockClient extends Mock implements http.Client {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Test login method generates error', (WidgetTester tester) async {
+    // Create a mock HTTP client
+    MockClient mockClient = MockClient();
+
+    // Create an instance of APIService with the mock client
+    APIService.client = mockClient;
+
+    // Define the behavior of the client.post method in the mock object
+
+    // Build the widget
     await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Create a login request model
+    LoginRequestModel loginModel = LoginRequestModel(email: "sender@gmail.com", password: "1234");
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Call the login method and store the result
+    bool loginResult = await APIService.login(loginModel);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the login method is called once with the specified parameters
+    verify(mockClient.post(
+      Uri.parse(APIConfig.API_URL + APIConfig.LOGIN_URL),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(loginModel.toJson()),
+    )).called(1);
+
+    // Verify that the login result is true
+    expect(loginResult, true);
   });
 }

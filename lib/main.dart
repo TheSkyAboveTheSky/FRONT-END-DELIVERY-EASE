@@ -3,7 +3,6 @@ import 'package:deliver_ease/Pages/Menu/MenuPage.dart';
 import 'package:deliver_ease/Pages/Register/RegisterPage.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
 import 'package:deliver_ease/Pages/Profle/profile.dart';
-import 'package:deliver_ease/Services/shared_service.dart';
 
 void main() {
   runApp(MyApp());

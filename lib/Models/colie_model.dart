@@ -1,6 +1,5 @@
 import 'package:deliver_ease/Models/address_model.dart';
 import 'package:deliver_ease/Models/Enums/status.dart';
-import 'package:deliver_ease/Models/user_model.dart';
 
 class Colie {
   Colie({

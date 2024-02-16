@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'shared_service.dart';
-import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Models/trajet_model.dart';
 import 'package:deliver_ease/Config/config.dart';
-import 'package:deliver_ease/Services/shared_service.dart';
 
 class TrajetService {
   static var client = http.Client();
@@ -15,15 +13,10 @@ class TrajetService {
     };
     String? token = await SharedService.getToken();
     print('Token: $token');
-    if (token != null) {
-      requestHeaders['Authorization'] = 'Bearer $token';
-    } else {
-      print('Failed to retrieve JWT token.');
-      return null;
-    }
-    try {
+    requestHeaders['Authorization'] = 'Bearer $token';
+      try {
       var response = await client.get(
-        Uri.parse(APIConfig.API_URL + APIConfig.tripsURL + "/all"),
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/all"),
         headers: requestHeaders,
       );
       print('Response: ${response.body}');
@@ -49,16 +42,11 @@ class TrajetService {
     };
     String? token = await SharedService.getToken();
     print('Token: $token');
-    if (token != null) {
-      requestHeaders['Authorization'] = 'Bearer $token';
-    } else {
-      print('Failed to retrieve JWT token.');
-      return null;
-    }
-
+    requestHeaders['Authorization'] = 'Bearer $token';
+  
     try {
       var response = await client.post(
-        Uri.parse(APIConfig.API_URL + APIConfig.tripsURL + "/add"),
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/add"),
         headers: requestHeaders,
         body: jsonEncode(model.toJson()),
       );
@@ -80,16 +68,11 @@ class TrajetService {
     };
     String? token = await SharedService.getToken();
     print('Token: $token');
-    if (token != null) {
-      requestHeaders['Authorization'] = 'Bearer $token';
-    } else {
-      print('Failed to retrieve JWT token.');
-      return null;
-    }
-
+    requestHeaders['Authorization'] = 'Bearer $token';
+  
     try {
       var response = await client.put(
-        Uri.parse(APIConfig.API_URL + APIConfig.tripsURL + "/update/${id}"),
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/update/${id}"),
         headers: requestHeaders,
         body: jsonEncode(model.toJson()),
       );
@@ -111,16 +94,11 @@ class TrajetService {
     };
     String? token = await SharedService.getToken();
     print('Token: $token');
-    if (token != null) {
-      requestHeaders['Authorization'] = 'Bearer $token';
-    } else {
-      print('Failed to retrieve JWT token.');
-      return null;
-    }
-
+    requestHeaders['Authorization'] = 'Bearer $token';
+  
     try {
       var response = await client.delete(
-        Uri.parse(APIConfig.API_URL + APIConfig.tripsURL + "/delete/${id}"),
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/delete/${id}"),
         headers: requestHeaders,
       );
       print('Response: ${response.body}');
@@ -145,7 +123,7 @@ class TrajetService {
 
     try {
       var response = await client.post(
-        Uri.parse(APIConfig.API_URL + APIConfig.tripsURL + "/searchTrips"),
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/searchTrips"),
         headers: requestHeaders,
         body: jsonEncode(model.toJson()),
       );

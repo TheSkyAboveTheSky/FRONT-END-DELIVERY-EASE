@@ -13,15 +13,10 @@ class ReviewService {
     };
     String? token = await SharedService.getToken();
     print('Token: $token');
-    if (token != null) {
-      requestHeaders['Authorization'] = 'Bearer $token';
-    } else {
-      print('Failed to retrieve JWT token.');
-      return false;
-    }
-    try {
+    requestHeaders['Authorization'] = 'Bearer $token';
+      try {
       var response = await client.post(
-        Uri.parse("${APIConfig.API_URL}${APIConfig.reviewsURL}/add/$delivery_id"),
+        Uri.parse("${APIConfig.API_URL}${APIConfig.REVIEW_URL}/add/$delivery_id"),
         headers: requestHeaders,
         body: jsonEncode(model.toJson()),
       );
