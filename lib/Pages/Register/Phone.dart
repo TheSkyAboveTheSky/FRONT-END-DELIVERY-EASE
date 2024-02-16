@@ -2,10 +2,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_verification_code/flutter_verification_code.dart';
+
 import 'package:deliver_ease/Pages/Register/VerificationScreen.dart';
 import 'dart:async';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 
 class PhoneForm extends StatefulWidget {
   const PhoneForm({Key? key}) : super(key: key);
@@ -68,6 +69,14 @@ class PhoneFormState extends State<PhoneForm> {
     });
 
     super.initState();
+    _checkAuthentication();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/menu');
+    }
   }
 
   @override
@@ -179,10 +188,11 @@ class PhoneFormState extends State<PhoneForm> {
                 duration: const Duration(milliseconds: 500),
                 child: MaterialButton(
                   elevation: 0,
-                  onPressed: ()=> {
+                  onPressed: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => VerificationScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => VerificationScreen()),
                     )
                   },
                   color: Colors.deepOrange,

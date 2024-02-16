@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
+import 'package:deliver_ease/Pages/Register/RegisterForm.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
@@ -67,6 +69,14 @@ class VerificationScreenState extends State<VerificationScreen> {
     });
 
     super.initState();
+    _checkAuthentication();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/menu');
+    }
   }
 
   @override
