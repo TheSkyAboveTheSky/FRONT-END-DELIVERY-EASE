@@ -2,20 +2,21 @@ import 'dart:convert';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:deliver_ease/Config/config.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class SharedService {
   static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
-  static Future<bool> isAuthenticated() async {
-    String? jsonString = await _secureStorage.read(key: "login_details");
-    if (jsonString != null) {
-      return true;
-    }
-    return false;
-  }
-
   static Future<bool> isLoggedIn() async {
-    return await _secureStorage.containsKey(key: "login_details");
+    String? token = await SharedService.getToken();
+    try {
+      final jwt = JWT.verify(token, APIConfig.SECRET_KEY as JWTKey);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   static Future<LoginResponseModel?> loginDetails() async {
@@ -48,38 +49,38 @@ class SharedService {
       String? token = data["token"];
       if (token != null) {
         return token;
-      }else{
+      } else {
         return "";
       }
     }
     return "";
   }
-    static Future<String> getId() async {
+
+  static Future<String> getId() async {
     String? jsonString = await _secureStorage.read(key: "login_details");
     if (jsonString != null) {
       Map<String, dynamic> data = json.decode(jsonString);
       String? id = data["idUserAuthenticated"];
       if (id != null) {
         return id;
-      }else{
+      } else {
         return "";
       }
     }
     return "";
   }
 
-    static Future<String> getRole() async {
+  static Future<String> getRole() async {
     String? jsonString = await _secureStorage.read(key: "login_details");
     if (jsonString != null) {
       Map<String, dynamic> data = json.decode(jsonString);
       String? role = data["role"];
       if (role != null) {
         return role;
-      }else{
+      } else {
         return "";
       }
     }
     return "";
   }
-
 }
