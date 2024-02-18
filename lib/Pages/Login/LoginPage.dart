@@ -3,7 +3,7 @@ import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:deliver_ease/Pages/Profle/profile.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/menu');
+      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
   @override
@@ -264,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProfilePage()),
+                                  builder: (context) => Profile()),
                             );
                           } else {
                             FormHelper.showSimpleAlertDialog(context, "Erreur",

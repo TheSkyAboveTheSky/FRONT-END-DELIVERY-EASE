@@ -60,7 +60,6 @@ class _MenuPageState extends State<MenuPage> {
                       GestureDetector(
                         onTap: () {
                           Scaffold.of(context).openDrawer();
-                          // Scaffold.of(context).openEndDrawer();
                         },
                         child: Container(
                           height: 40,

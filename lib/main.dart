@@ -1,8 +1,8 @@
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:deliver_ease/Pages/Menu/MenuPage.dart';
 import 'package:deliver_ease/Pages/Register/RegisterPage.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
-import 'package:deliver_ease/Pages/Profle/profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,10 +22,12 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(builder: (context) => RegisterPage());
         } else {
           switch (settings.name) {
+            case '/profile':
+              return MaterialPageRoute(builder: (context) => Profile());
+            /*
             case '/menu':
               return MaterialPageRoute(builder: (context) => MenuPage());
-            case '/profile':
-              return MaterialPageRoute(builder: (context) => ProfilePage());
+            */
             default:
               return MaterialPageRoute(builder: (context) => LoginPage());
           }

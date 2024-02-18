@@ -9,14 +9,7 @@ class SharedService {
   static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   static Future<bool> isLoggedIn() async {
-    String? token = await SharedService.getToken();
-    try {
-      final jwt = JWT.verify(token, APIConfig.SECRET_KEY as JWTKey);
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
+    return await _secureStorage.containsKey(key: "login_details");
   }
 
   static Future<LoginResponseModel?> loginDetails() async {

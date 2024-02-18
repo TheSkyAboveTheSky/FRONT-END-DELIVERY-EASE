@@ -1,8 +1,8 @@
 enum Status {
+  UNSELECTED,
   UNCONFIRMED,
-  CONFIRMED,
-  IN_PROGRESS,
   ACCEPTED,
+  REFUSED,
   IN_TRANSIT,
   DELIVERED
 }
@@ -12,10 +12,10 @@ extension StatusExtension on Status {
     switch (this) {
       case Status.UNCONFIRMED:
         return 'UNCONFIRMED';
-      case Status.CONFIRMED:
-        return 'CONFIRMED';
-      case Status.IN_PROGRESS:
-        return 'IN_PROGRESS';
+      case Status.UNSELECTED:
+        return 'UNSELECTED';
+      case Status.REFUSED:
+        return 'REFUSED';
       case Status.ACCEPTED:
         return 'ACCEPTED';
       case Status.IN_TRANSIT:
