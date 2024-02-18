@@ -2,24 +2,20 @@ import 'dart:convert';
 import 'package:deliver_ease/Models/Enums/role.dart';
 
 class User {
-  User({
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.role,
-  });
+  User({this.email, this.firstName, this.lastName, this.role, this.rating});
 
   String? email;
   String? firstName;
   String? lastName;
   Role? role;
+  double? rating;
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     role = _parseRole(json['role']);
-    ;
+    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +24,7 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'role': role?.toJsonString(),
+      'rating': rating
     };
     return data;
   }

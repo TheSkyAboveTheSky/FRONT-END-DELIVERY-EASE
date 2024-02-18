@@ -1,5 +1,9 @@
-import 'package:deliver_ease/Pages/Colie/ColieForm.dart';
+import 'package:deliver_ease/Pages/Menu/ChoisirDestination.dart';
+import 'package:deliver_ease/Pages/Menu/Colies/ColieForm.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
+import 'package:deliver_ease/Pages/Menu/Colies/Colies.dart';
+import 'package:deliver_ease/Pages/Menu/MenuPage.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +50,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Mes Colies',
                     icon: "assets/images/logo2.png",
                     onClicked: () => selectedItem(context, 1),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Chercher Un Trajet',
+                    icon: "assets/images/icon_search.png",
+                    onClicked: () => selectedItem(context,  2),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -114,12 +124,17 @@ class NavigationDrawerWidget extends StatelessWidget {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ColieForm(),
+          builder: (context) => Profile(),
         ));
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ColieForm(),
+          builder: (context) => Colies(),
+        ));
+        break;
+      case 2:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ChoisirDestination(),
         ));
         break;
     }
