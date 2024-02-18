@@ -38,7 +38,6 @@ class ColieService {
       'Content-Type': 'application/json',
     };
     String? token = await SharedService.getToken();
-    print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
       try {
       var response = await client.get(

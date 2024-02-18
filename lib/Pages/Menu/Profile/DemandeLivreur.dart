@@ -3,6 +3,10 @@ import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:deliver_ease/Models/trajet_model.dart';
+import 'package:deliver_ease/Services/trip_service.dart';
+import 'package:deliver_ease/Models/address_model.dart';
+import 'package:intl/intl.dart';
 
 class DemandeLivreur extends StatefulWidget {
   const DemandeLivreur({Key? key}) : super(key: key);
@@ -12,6 +16,20 @@ class DemandeLivreur extends StatefulWidget {
 }
 
 class _DemandeLivreurState extends State<DemandeLivreur> {
+  List<Trajet> trajets = [];
+  @override
+  void initState() {
+    super.initState();
+    setTrajets();
+  }
+
+  void setTrajets() async {
+    List<Trajet>? trajets = await TrajetService.getAllTrajet();
+    setState(() {
+      this.trajets = trajets ?? [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,16 +128,33 @@ class _DemandeLivreurState extends State<DemandeLivreur> {
             SizedBox(
               height: 10,
             ),
-            MakeCardTrajet("Rabat", "Casablanca", "01/11/2023", 1),
-            SizedBox(
-              height: 10,
+            Expanded(
+              child: ListView.builder(
+                itemCount: trajets.length,
+                itemBuilder: (context, index) {
+                  Trajet trajet = trajets[index];
+                  return Column(
+                    children: [
+                      SizedBox(height: 10),
+                      MakeCardTrajet(
+                        trajet.departureAddress!.city,
+                        trajet.arrivalAddress!.city,
+                        DateFormat('dd-MM-yyyy HH:mm')
+                            .format(trajet.departureDate!),
+                        DateFormat('dd-MM-yyyy HH:mm')
+                            .format(trajet.arrivalDate!),
+                        trajet.id,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-            MakeCardTrajet("Rabat", "Casablanca", "01/11/2023", 1),
           ]),
         )));
   }
 
-  Widget MakeCardTrajet(villeExp, villeDest, date, id) {
+  Widget MakeCardTrajet(villeExp, villeDest, dateDepart, dateArrive, id) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -162,7 +197,7 @@ class _DemandeLivreurState extends State<DemandeLivreur> {
                       fontSize: 11),
                 ),
                 Text(
-                  date.toUpperCase(),
+                  (dateDepart + " -> " + dateArrive).toUpperCase(),
                   style: TextStyle(
                       color: Colors.black45,
                       fontFamily: "Montserrat",

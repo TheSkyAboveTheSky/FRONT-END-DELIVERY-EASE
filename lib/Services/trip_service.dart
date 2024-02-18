@@ -12,20 +12,17 @@ class TrajetService {
       'Content-Type': 'application/json',
     };
     String? token = await SharedService.getToken();
-    print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
       try {
       var response = await client.get(
         Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/all"),
         headers: requestHeaders,
       );
-      print('Response: ${response.body}');
       if (response.statusCode == 200) {
         List<Trajet> trajets = [];
         for (var trajet in jsonDecode(response.body)) {
           trajets.add(Trajet.fromJson(trajet));
         }
-        print('Trajets: $trajets');
         return trajets;
       } else {
         return null;

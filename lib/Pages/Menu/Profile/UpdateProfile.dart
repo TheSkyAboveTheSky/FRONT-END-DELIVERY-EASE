@@ -1,10 +1,5 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:deliver_ease/Pages/Menu/MenuPage.dart';
-import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
-import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';

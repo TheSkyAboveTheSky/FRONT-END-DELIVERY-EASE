@@ -7,7 +7,7 @@ import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:deliver_ease/Services/parcel_service.dart';
 class ListColiesTrajet extends StatefulWidget {
   const ListColiesTrajet({Key? key}) : super(key: key);
 
@@ -19,6 +19,19 @@ class _ListColiesTrajetState extends State<ListColiesTrajet> {
   var screenWidth;
 
   List<Colie> colies = [];
+    @override
+  void initState() {
+    super.initState();
+    setColies();
+  }
+
+  void setColies() async {
+    List<Colie>? colies = await ColieService.getAllColie();
+    setState(() {
+      this.colies = colies ?? [];
+    });
+    print(this.colies);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -28,9 +28,9 @@ class Trajet {
     arrivalAddress = Address.fromJson(json['arrivalAddress']);
     departureDate = DateTime.parse(json['departureDate']);
     arrivalDate = DateTime.parse(json['arrivalDate']);
-    cost = json['cost'];
-    description = json['description'];
-    user = User.fromJson(json['user']);
+    //cost = json['cost'];
+    //description = json['description'];
+    //user = User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
