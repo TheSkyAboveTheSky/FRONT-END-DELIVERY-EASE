@@ -14,7 +14,7 @@ class ColieService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.post(
         Uri.parse(APIConfig.API_URL + APIConfig.PARCEL_URL + "/add"),
@@ -39,7 +39,7 @@ class ColieService {
     };
     String? token = await SharedService.getToken();
     requestHeaders['Authorization'] = 'Bearer $token';
-      try {
+    try {
       var response = await client.get(
         Uri.parse(APIConfig.API_URL + APIConfig.PARCEL_URL + "/all"),
         headers: requestHeaders,
@@ -66,7 +66,7 @@ class ColieService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.put(
         Uri.parse(APIConfig.API_URL + APIConfig.PARCEL_URL + "/update/${id}"),
@@ -92,7 +92,7 @@ class ColieService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.delete(
         Uri.parse(APIConfig.API_URL + APIConfig.PARCEL_URL + "/delete/${id}"),
@@ -109,4 +109,58 @@ class ColieService {
       return false;
     }
   }
+
+  static Future<List<Colie>?> getUserColies(int id) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
+    try {
+      var response = await client.get(
+        Uri.parse(
+            APIConfig.API_URL + APIConfig.USER_URL + "/getUserParcels/${id}"),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 200) {
+        List<Colie> colies = [];
+        for (var colie in jsonDecode(response.body)) {
+          colies.add(Colie.fromJson(colie));
+        }
+        return colies;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error in GetUserColies: $e');
+      return null;
+    }
+  }
+
+  static Future<List<Colie>?> getDeliveryParcels(int id) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
+    try {
+      var response = await client.get(
+        Uri.parse(APIConfig.API_URL + "/senders/myParcels/${id}"),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 200) {
+        List<Colie> colies = [];
+        for (var colie in jsonDecode(response.body)) {
+          colies.add(Colie.fromJson(colie));
+        }
+        return colies;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error in GetDeliveryParcels: $e');
+      return null;
+    }
+  }
+
 }

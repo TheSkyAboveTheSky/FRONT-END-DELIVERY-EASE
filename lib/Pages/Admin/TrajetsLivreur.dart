@@ -1,4 +1,5 @@
-import 'package:deliver_ease/Pages/Menu/Profile/ListColiesTrajet.dart';
+import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Pages/Admin/UserReviews.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,14 +8,16 @@ import 'package:deliver_ease/Models/trajet_model.dart';
 import 'package:deliver_ease/Services/trip_service.dart';
 import 'package:intl/intl.dart';
 
-class DemandeLivreur extends StatefulWidget {
-  const DemandeLivreur({Key? key}) : super(key: key);
+class TrajetLivreur extends StatefulWidget {
+  final User user;
+
+  const TrajetLivreur({super.key, required this.user});
 
   @override
-  State<DemandeLivreur> createState() => _DemandeLivreurState();
+  State<TrajetLivreur> createState() => _TrajetLivreurState();
 }
 
-class _DemandeLivreurState extends State<DemandeLivreur> {
+class _TrajetLivreurState extends State<TrajetLivreur> {
   List<Trajet> trajets = [];
   @override
   void initState() {
@@ -107,7 +110,7 @@ class _DemandeLivreurState extends State<DemandeLivreur> {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  "List de vos trajets".toUpperCase(),
+                  "List des trajets".toUpperCase(),
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -158,7 +161,7 @@ class _DemandeLivreurState extends State<DemandeLivreur> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ListColiesTrajet(trajetId: id)),
+          MaterialPageRoute(builder: (context) => UserReviews(user: widget.user)),
         );
       },
       child: Container(

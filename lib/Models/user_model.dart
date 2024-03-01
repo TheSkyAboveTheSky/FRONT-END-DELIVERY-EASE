@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Models/Enums/accountStatus.dart';
 
 class User {
   User({this.email, this.firstName, this.lastName, this.role, this.rating});
@@ -9,6 +10,9 @@ class User {
   String? lastName;
   Role? role;
   double? rating;
+  String? phoneNumber;
+  int? id;
+  AccountStatus? accountStatus;
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -16,6 +20,9 @@ class User {
     lastName = json['lastName'];
     role = _parseRole(json['role']);
     rating = json['rating'];
+    phoneNumber = json['phoneNumber'] ?? "000";
+    id = json['id'] ?? null;
+    accountStatus = _parseAccountStatus(json['accountStatus']) ?? AccountStatus.ACTIVATED;
   }
 
   Map<String, dynamic> toJson() {
@@ -24,7 +31,10 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'role': role?.toJsonString(),
-      'rating': rating
+      'rating': rating,
+      'phoneNumber': phoneNumber,
+      'id': id,
+      'accountStatus': accountStatus?.toJsonString()
     };
     return data;
   }
@@ -161,5 +171,19 @@ Role? _parseRole(String? roleStr) {
       return Role.DELIVERY_PERSON;
     default:
       throw ArgumentError('Unknown Role: $roleStr');
+  }
+}
+
+AccountStatus? _parseAccountStatus(String? accountStatusStr) {
+  if (accountStatusStr == null) {
+    return AccountStatus.ACTIVATED;
+  }
+  switch (accountStatusStr.toUpperCase()) {
+    case 'ACTIVATED':
+      return AccountStatus.ACTIVATED;
+    case 'DEACTIVATED':
+      return AccountStatus.DEACTIVATED;
+    default:
+      throw ArgumentError('Unknown AccountStatus: $accountStatusStr');
   }
 }

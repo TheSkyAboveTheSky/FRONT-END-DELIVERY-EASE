@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'shared_service.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Config/config.dart';
+import 'package:deliver_ease/Services/user_service.dart';
 
 class APIService {
   static var client = http.Client();
@@ -55,4 +56,5 @@ class APIService {
       return false;
     }
   }
+
 }

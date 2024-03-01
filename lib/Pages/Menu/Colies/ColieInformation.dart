@@ -1,4 +1,10 @@
+import 'package:deliver_ease/Models/Enums/status.dart';
 import 'package:deliver_ease/Models/colie_model.dart';
+import 'package:deliver_ease/Models/delivery_model.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/UserProfile.dart';
+import 'package:deliver_ease/Services/delivery_service.dart';
+import 'package:deliver_ease/Services/reviews_service.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
@@ -15,10 +21,35 @@ class ColieInformation extends StatefulWidget {
 }
 
 class _ColieInformationState extends State<ColieInformation> {
+  var isAdmin = false;
+  var delivery = Delivery();
   var popUpIsShowing = false;
   var width, height;
   double rating = 0;
   final _avisController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setDelivery();
+    _isAdmin();
+  }
+
+  void _isAdmin() async {
+    bool? isAdmin = await SharedService.isAdmin();
+    setState(() {
+      this.isAdmin = isAdmin;
+    });
+  }
+
+  void setDelivery() async {
+    Delivery? delivery = await DeliveryService.getDelivery(widget.colie.id!);
+    if (delivery != null) {
+      setState(() {
+        this.delivery = delivery;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,36 +94,46 @@ class _ColieInformationState extends State<ColieInformation> {
                             ],
                           ),
                           GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                popUpIsShowing = !popUpIsShowing;
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Row(children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "Saisir un avis".toUpperCase(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "Cairo",
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
+                            onTap: delivery.colie?.status == Status.DELIVERED &&
+                                    !isAdmin
+                                ? () {
+                                    setState(() {
+                                      popUpIsShowing = !popUpIsShowing;
+                                    });
+                                  }
+                                : null,
+                            child: Opacity(
+                              opacity:
+                                  delivery.colie?.status == Status.DELIVERED &&
+                                          !isAdmin
+                                      ? 1
+                                      : 0,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    "Saisir un avis".toUpperCase(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Cairo",
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(height: 10),
@@ -260,64 +301,62 @@ class _ColieInformationState extends State<ColieInformation> {
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 5,
-                    height: 5,
-                    margin: EdgeInsets.only(top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.deepOrange,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.deepOrange),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 48,
+                        color: Colors.black45,
+                      ),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.deepOrange),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    width: 5,
+                    width: 20,
                   ),
-                  Flexible(
-                    child: Text(
-                      widget.colie.shippingAddress!.city!.toString().toUpperCase(),
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Montserrat",
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.colie.shippingAddress!.city!
+                            .toString()
+                            .toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Montserrat",
+                          fontSize: 16,
+                        ),
+                        softWrap: true,
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 5,
-                    height: 5,
-                    margin: EdgeInsets.only(top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.deepOrange,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    // ou Expanded
-                    child: Text(
-                      widget.colie.destinationAddress!.city!.toString().toUpperCase(),
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Montserrat",
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(height: 30.0),
+                      Text(
+                        widget.colie.destinationAddress!.city!
+                            .toString()
+                            .toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Montserrat",
+                          fontSize: 16,
+                        ),
+                        softWrap: true,
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -358,73 +397,102 @@ class _ColieInformationState extends State<ColieInformation> {
   }
 
   Widget buildInformationLivreur() {
-    return Column(children: [
-      Row(children: [
-        Container(
-          width: 20,
-          color: Colors.deepOrange,
-          height: 1,
-        ),
-        SizedBox(width: 5),
-        Image(
-          image: AssetImage("assets/images/livreur.png"),
-          width: 22,
-        ),
-        SizedBox(width: 10),
-        Text("Livreur".toUpperCase(),
-            style: TextStyle(
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 20,
+              color: Colors.deepOrange,
+              height: 1,
+            ),
+            SizedBox(width: 5),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfile(user: delivery.user!)),
+                );
+              },
+              child: Image(
+                image: AssetImage("assets/images/livreur.png"),
+                width: 22,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+              "Livreur".toUpperCase(),
+              style: TextStyle(
                 color: Colors.black,
                 fontFamily: "Cairo",
                 fontSize: 12,
-                fontWeight: FontWeight.bold)),
-        SizedBox(width: 5),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            color: Colors.deepOrange,
-            height: 1,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: Colors.deepOrange,
+                height: 1,
+              ),
+            ),
+          ],
         ),
-      ]),
-      SizedBox(
-        height: 10,
-      ),
-      Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(children: [
-          Container(
-            height: 70,
-            width: 70,
-            padding: EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.deepOrange),
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Image.asset("assets/images/image_avatar.jpg"),
-            ),
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserProfile(user:delivery.user!)),
+                  );
+                },
+                child: Container(
+                  height: 70,
+                  width: 70,
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.deepOrange),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40),
+                    child: Image.asset("assets/images/image_avatar.jpg"),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                children: [
+                  Text(
+                    "${delivery.user?.lastName} ${delivery.user?.firstName}"
+                        .toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
+            ],
           ),
-          SizedBox(
-            width: 10,
-          ),
-          /*
-          Column(children: [
-            Text(colie.livreurData.nom + " " + colie.livreurData.prenom,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 15,
-            ),
-          ],),
-          */
-        ]),
-      )
-    ]);
+        )
+      ],
+    );
   }
-
+  
   Widget buildInformationsStatus() {
     return Column(children: [
       Row(children: [
@@ -465,27 +533,11 @@ class _ColieInformationState extends State<ColieInformation> {
                     width: 5,
                     height: 5,
                     margin: EdgeInsets.only(top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.deepOrange,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
                   ),
                   SizedBox(
                     width: 5,
                   ),
-                  Flexible(
-                    // ou Expanded
-                    child: Text(
-                      widget.colie.status.toString().toUpperCase(),
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Montserrat",
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  makeCardStatus(status: widget.colie.status),
                 ],
               ),
             ],
@@ -497,9 +549,12 @@ class _ColieInformationState extends State<ColieInformation> {
     final double popupWidth = width * 0.8;
     final double popupHeight = height * 0.5;
 
-    void sendReview() {
-      print("Avis envoyé :" + controller.text);
-      print("Note : $rating");
+    void sendReview() async {
+      await ReviewService.addReview(
+          delivery.id!, controller.text, rating as int);
+      setState(() {
+        popUpIsShowing = !popUpIsShowing;
+      });
     }
 
     return Center(
@@ -522,15 +577,10 @@ class _ColieInformationState extends State<ColieInformation> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section
               buildHeader(),
-
-              // Body Section
               Expanded(
                 child: buildBody(controller: controller),
               ),
-
-              // Footer Section
               buildFooter(sendReview),
             ],
           ),
@@ -562,14 +612,12 @@ class _ColieInformationState extends State<ColieInformation> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text Fields
         buildTextField(
             imagePath: "assets/images/icon_description.png",
             labelText: "Avis",
             placeholder: "Votre Avis Ici .",
             controller: controller),
         SizedBox(height: 20),
-        // Rating Bar
         buildRatingBar(),
       ],
     );
@@ -711,6 +759,46 @@ class _ColieInformationState extends State<ColieInformation> {
           rating = value;
         });
       },
+    );
+  }
+
+  Widget makeCardStatus({Status? status}) {
+    Color color;
+
+    switch (status) {
+      case Status.UNCONFIRMED:
+        color = Color.fromRGBO(255, 100, 11, 1.0);
+        break;
+      case Status.UNSELECTED:
+        color = Color.fromRGBO(255, 100, 11, 1.0);
+        break;
+      case Status.ACCEPTED:
+        color = Colors.green;
+        break;
+      case Status.IN_TRANSIT:
+        color = Colors.yellow;
+        break;
+      case Status.DELIVERED:
+        color = Color.fromRGBO(101, 224, 2, 1.0);
+        break;
+      default:
+        color = Colors.grey;
+    }
+
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [MyAppBoxShadow.boxShadowSecond]),
+      child: Text(
+        status.toString().split('.').last.toUpperCase(),
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Montserrat",
+            fontSize: 11),
+      ),
     );
   }
 }

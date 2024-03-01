@@ -1,4 +1,5 @@
 import 'package:deliver_ease/Models/delivery_model.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 
 class Avi {
   Avi({
@@ -6,21 +7,21 @@ class Avi {
     this.starRating,
     this.comment,
     this.reviewDate,
-    this.delivery,
+    this.user,
   });
 
   int? id;
   int? starRating;
   String? comment;
   DateTime? reviewDate;
-  Delivery? delivery; 
+  User? user;
 
   Avi.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     starRating = json['starRating'];
     comment = json['comment'];
     reviewDate = DateTime.parse(json['reviewDate']);
-    delivery = Delivery.fromJson(json['delivery']);
+    user = User.fromJson(json['user']) ?? User();
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +30,7 @@ class Avi {
       'starRating': starRating,
       'comment': comment,
       'reviewDate': reviewDate?.toIso8601String(),
-      'delivery': delivery?.toJson(),
+      'user': user?.toJson(),
     };
     return data;
   }

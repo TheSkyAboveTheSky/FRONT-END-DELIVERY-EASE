@@ -1,6 +1,8 @@
 import 'package:deliver_ease/Models/trajet_model.dart';
+import 'package:deliver_ease/Pages/Login/LoginPage.dart';
+import 'package:deliver_ease/Pages/Menu/Trajet/InformationTrajet.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Services/trip_service.dart';
-import 'package:deliver_ease/Widgets/button_widget.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
@@ -22,6 +24,15 @@ class _MenuPageState extends State<MenuPage> {
   void initState() {
     super.initState();
     setTrajets();
+    _checkAuthentication();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (!isAuthenticated) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
   }
 
   void setTrajets() async {
@@ -30,7 +41,6 @@ class _MenuPageState extends State<MenuPage> {
     setState(() {
       this.trajets = trajets ?? [];
     });
-    print(this.trajets);
   }
 
   @override
@@ -172,232 +182,264 @@ class _MenuPageState extends State<MenuPage> {
                       itemCount: trajets.length,
                       itemBuilder: (context, index) {
                         Trajet trajet = trajets[index];
-                        return Column(
-                          children: [
-                            SizedBox(height: 10),
-                            Center(
-                              child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width * 2.8 / 3,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      MyAppBoxShadow.boxShadowSecond
-                                    ]),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 60,
-                                            height: 60,
-                                            padding: EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border: Border.all(
-                                                  color: Colors.deepOrange,
-                                                  width: 2),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              child: Image.asset(
-                                                  "assets/images/image_avatar.jpg"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  trajet.user!.firstName!,
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontFamily: "Montserrat",
-                                                    fontSize: 16,
-                                                  ),
-                                                  softWrap: true,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.star,
-                                                        color: Colors.black45),
-                                                    Text(
-                                                        trajet.user!.rating
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black45,
-                                                            fontFamily:
-                                                                "Montserrat",
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 19)),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Text(
-                                            trajet.cost.toString()+"EU",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: "Montserrat"),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 2,
-                                        color: Colors.black12,
-                                      ),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        InformationTrajet(trajet: trajet)));
+                          },
+                          child: Column(
+                            children: [
+                              SizedBox(height: 10),
+                              Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      2.8 /
+                                      3,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        MyAppBoxShadow.boxShadowSecond
+                                      ]),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
                                           children: [
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  DateFormat('dd-MM-yyyy HH:mm')
-                                                      .format(trajet
-                                                          .departureDate!),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily: "Montserrat",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
+                                            Container(
+                                              width: 60,
+                                              height: 60,
+                                              padding: EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                border: Border.all(
+                                                    color: Colors.deepOrange,
+                                                    width: 2),
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () {},
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  child: Image.asset(
+                                                      "assets/images/image_avatar.jpg"),
                                                 ),
-                                                Text(
-                                                  "5h",
-                                                  style: TextStyle(
-                                                      color: Colors.black12,
-                                                      fontFamily: "Montserrat",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Text(
-                                                  DateFormat('dd-MM-yyyy HH:mm')
-                                                      .format(
-                                                          trajet.arrivalDate!),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily: "Montserrat",
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                              ],
+                                              ),
                                             ),
-                                            SizedBox(width: 20),
-                                            Column(children: [
-                                              Container(
-                                                width: 10,
-                                                height: 10,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.black54,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                              ),
-                                              Container(
-                                                height: 60,
-                                                width: 2,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.black54),
-                                              ),
-                                              Container(
-                                                width: 10,
-                                                height: 10,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.black54,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                              ),
-                                            ]),
-                                            SizedBox(width: 20),
-                                            Column(
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Expanded(
+                                              child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Row(children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          "assets/images/logo2.png"),
-                                                      width: 20,
+                                                  Text(
+                                                    trajet.user!.firstName!,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: "Montserrat",
+                                                      fontSize: 16,
                                                     ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      trajet.departureAddress!
-                                                          .city!
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontFamily:
-                                                              "Montserrat",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 16),
-                                                    ),
-                                                  ]),
-                                                  SizedBox(
-                                                    height: 30,
+                                                    softWrap: true,
                                                   ),
-                                                  Row(children: [
-                                                    Image(
-                                                      image: AssetImage(
-                                                          "assets/images/livraison_de_colis_dest.png"),
-                                                      width: 20,
-                                                    ),
+                                                  Row(
+                                                    children: [
+                                                      Icon(Icons.star,
+                                                          color:
+                                                              Colors.black45),
+                                                      Text(
+                                                          trajet.user!.rating
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors
+                                                                      .black45,
+                                                              fontFamily:
+                                                                  "Montserrat",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 19)),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(children: [
+                                              Text(
+                                                trajet.cost.toString(),
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: "Montserrat"),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Image(
+                                                image: AssetImage(
+                                                    "assets/images/icon_money.png"),
+                                                width: 20,
+                                              )
+                                            ]),
+                                          ],
+                                        ),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 2,
+                                          color: Colors.black12,
+                                        ),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    DateFormat(
+                                                            'dd-MM-yyyy HH:mm')
+                                                        .format(trajet
+                                                            .departureDate!),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                  Text(
+                                                    "${trajet.arrivalDate!.difference(trajet.departureDate!).inHours}h ${trajet.arrivalDate!.difference(trajet.departureDate!).inMinutes.remainder(60)}m",
+                                                    style: TextStyle(
+                                                        color: Colors.black12,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Text(
+                                                    DateFormat(
+                                                            'dd-MM-yyyy HH:mm')
+                                                        .format(trajet
+                                                            .arrivalDate!),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(width: 20),
+                                              Column(children: [
+                                                Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black54,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                ),
+                                                Container(
+                                                  height: 60,
+                                                  width: 2,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black54),
+                                                ),
+                                                Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black54,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                ),
+                                              ]),
+                                              SizedBox(width: 20),
+                                              Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(children: [
+                                                      Image(
+                                                        image: AssetImage(
+                                                            "assets/images/logo2.png"),
+                                                        width: 20,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        trajet.departureAddress!
+                                                            .city!
+                                                            .toString()
+                                                            .toUpperCase(),
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                "Montserrat",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ]),
                                                     SizedBox(
-                                                      width: 10,
+                                                      height: 30,
                                                     ),
-                                                    Text(
-                                                      trajet
-                                                          .arrivalAddress!.city!
-                                                          .toString()
-                                                          .toUpperCase(),
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontFamily:
-                                                              "Montserrat",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 16),
-                                                    ),
+                                                    Row(children: [
+                                                      Image(
+                                                        image: AssetImage(
+                                                            "assets/images/livraison_de_colis_dest.png"),
+                                                        width: 20,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        trajet.arrivalAddress!
+                                                            .city!
+                                                            .toString()
+                                                            .toUpperCase(),
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                "Montserrat",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ]),
                                                   ]),
-                                                ]),
-                                          ]),
-                                    ],
+                                            ]),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       },
                     ),

@@ -1,13 +1,15 @@
-import 'package:deliver_ease/Models/address_model.dart';
 import 'package:deliver_ease/Models/trajet_model.dart';
+import 'package:deliver_ease/Pages/Login/LoginPage.dart';
 import 'package:deliver_ease/Pages/Menu/MenuPage.dart';
-import 'package:deliver_ease/Widgets/button_widget.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/FunctionsUtils.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:deliver_ease/Services/user_service.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 
 class ChoisirDestination extends StatefulWidget {
   @override
@@ -18,12 +20,36 @@ class _ChoisirDestinationState extends State<ChoisirDestination> {
   String? depart;
   String? destination;
   late var screenWidth;
+  var user = User();
   late Color dominantColor = Colors.black;
+
+
   Future<void> setDominantColor() async {
     Color? extractedColor = await FunctionUtils.extractDominantColor(
         "assets/images/image_ville.jpg");
     setState(() {
       dominantColor = extractedColor ?? MyAppColors.blueSecondColor;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthentication();
+    setUserInfos();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (!isAuthenticated) {
+      Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+  }
+
+  Future<void> setUserInfos() async {
+    User? user = await UserService.getUserInfos();
+    setState(() {
+      this.user = user!;
     });
   }
 
@@ -150,7 +176,7 @@ class _ChoisirDestinationState extends State<ChoisirDestination> {
                                   height: 3,
                                 ),
                                 Text(
-                                  "SAID Mounji",
+                                  "${user.firstName} ${user.lastName}".toUpperCase(),
                                   style: TextStyle(
                                       color: Colors.black54,
                                       fontFamily: "Montserrat",
@@ -270,9 +296,11 @@ class _ChoisirDestinationState extends State<ChoisirDestination> {
                             width: double.infinity,
                             child: MaterialButton(
                               onPressed: () {
-                                if(depart!="" && destination!="")
-                                {
-                                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => MenuPage(addDepart: City(city: depart), addArrive: City(city: destination))));
+                                if (depart != "" && destination != "") {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => MenuPage(
+                                          addDepart: City(city: depart),
+                                          addArrive: City(city: destination))));
                                 }
                               },
                               height: 50,

@@ -1,5 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:deliver_ease/Models/address_model.dart';
+import 'package:deliver_ease/Pages/Login/LoginPage.dart';
+import 'package:deliver_ease/Pages/Menu/Colies/Colies.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
@@ -21,7 +25,29 @@ class _ColieFormState extends State<ColieForm> {
   final _expeditionController = TextEditingController();
   final _destinationController = TextEditingController();
   final _descriptionController = TextEditingController();
-  //final _identifiantDestinataireController = TextEditingController();
+
+    @override
+  void initState() {
+    super.initState();
+    _checkAuthentication();
+    _checkSender();
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (!isAuthenticated) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+  }
+
+  Future<void> _checkSender() async {
+    bool isSender = await SharedService.isSender();
+    if (!isSender) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Colies()));
+    }
+  }
 
   void _envoyer() {
     ScaffoldMessenger.of(context).showSnackBar(

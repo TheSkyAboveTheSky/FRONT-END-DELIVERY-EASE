@@ -13,7 +13,7 @@ class TrajetService {
     };
     String? token = await SharedService.getToken();
     requestHeaders['Authorization'] = 'Bearer $token';
-      try {
+    try {
       var response = await client.get(
         Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/all"),
         headers: requestHeaders,
@@ -40,7 +40,7 @@ class TrajetService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.post(
         Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/add"),
@@ -66,7 +66,7 @@ class TrajetService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.put(
         Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/update/${id}"),
@@ -92,7 +92,7 @@ class TrajetService {
     String? token = await SharedService.getToken();
     print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
-  
+
     try {
       var response = await client.delete(
         Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/delete/${id}"),
@@ -115,7 +115,6 @@ class TrajetService {
       'Content-Type': 'application/json',
     };
     String? token = await SharedService.getToken();
-    print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
 
     try {
@@ -124,7 +123,6 @@ class TrajetService {
         headers: requestHeaders,
         body: jsonEncode(model.toJson()),
       );
-      print('Response: ${response.body}');
       if (response.statusCode == 200) {
         List<Trajet> trajets = [];
         for (var trajet in jsonDecode(response.body)) {

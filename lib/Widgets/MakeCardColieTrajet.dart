@@ -1,12 +1,13 @@
-import 'package:deliver_ease/Models/colie_model.dart';
 import 'package:deliver_ease/Models/Enums/status.dart';
+import 'package:deliver_ease/Models/demande_model.dart';
 import 'package:deliver_ease/Pages/Menu/Profile/UserProfile.dart';
+import 'package:deliver_ease/Services/delivery_service.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MakeCardColieTrajet extends StatefulWidget {
-  final Colie colieData;
+  final Demande colieData;
 
   MakeCardColieTrajet({required this.colieData});
 
@@ -48,7 +49,7 @@ class _MakeCardColieState extends State<MakeCardColieTrajet> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserProfile()),
+                    MaterialPageRoute(builder: (context) => UserProfile(user:widget.colieData.user!)),
                   );
                 },
                 child: Row(
@@ -62,8 +63,7 @@ class _MakeCardColieState extends State<MakeCardColieTrajet> {
                           fontSize: 11),
                     ),
                     Text(
-                      ("${widget.colieData.identifier} + "
-                              " +${widget.colieData.identifier}")
+                      ("${widget.colieData.user!.firstName} ${widget.colieData.user!.lastName}")
                           .toUpperCase(),
                       style: TextStyle(
                           color: Colors.deepOrange,
@@ -99,24 +99,28 @@ class _MakeCardColieState extends State<MakeCardColieTrajet> {
             height: 10,
           ),
           buildStatusSpecificWidget(widget.colieData.status!),
-        ]));
+        ])
+        
+    );
   }
 
   Widget buildStatusSpecificWidget(Status status) {
     switch (status) {
-      case Status.UNSELECTED:
+      case Status.UNCONFIRMED:
         return Row(
           children: [
             makeButton(
                 label: "Accepter",
-                onPressed: () {
-                  // Action lorsque le bouton Accepter est pressé
+                onPressed: () async {
+                  await DeliveryService.accepterDemande(widget.colieData.id!);
+                  Navigator.pop(context);
                 }),
             SizedBox(width: 5),
             makeButton(
                 label: "Refuser",
-                onPressed: () {
-                  // Action lorsque le bouton Refuser est pressé
+                onPressed: () async {
+                  await DeliveryService.refuserDemande(widget.colieData.id!);
+                  Navigator.pop(context);
                 }),
           ],
         );
@@ -142,7 +146,14 @@ class _MakeCardColieState extends State<MakeCardColieTrajet> {
       onHorizontalDragEnd: (details) {
         _isSwiping = false;
         if (_dragPosition >= 1.0) {
-          _validate();
+          if(status == Status.ACCEPTED){
+            DeliveryService.transitDemande(widget.colieData.id!);
+            Navigator.pop(context);
+          }
+          else if (status == Status.IN_TRANSIT){
+            DeliveryService.delivredDemande(widget.colieData.id!);
+            Navigator.pop(context);
+          }
           Future.delayed(Duration(seconds: 1), () {
             setState(() {
               _dragPosition = 0.0;

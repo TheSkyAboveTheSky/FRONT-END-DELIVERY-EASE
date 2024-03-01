@@ -1,10 +1,14 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:deliver_ease/Services/user_service.dart';
+import 'package:deliver_ease/Models/user_model.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({Key? key}) : super(key: key);
@@ -15,15 +19,34 @@ class UpdateProfile extends StatefulWidget {
 
 class _UpdateProfileState extends State<UpdateProfile>
     with SingleTickerProviderStateMixin {
+  var user = User();
   late TabController _tabController = TabController(length: 2, vsync: this);
   final ImagePicker _picker = ImagePicker();
+  bool isApiCallProcess = false;
+
   var screenWidth;
   XFile? _imageFile;
 
   @override
   void initState() {
     super.initState();
+    _checkAuthentication();
+    setUserInfos();
     _tabController = TabController(length: 2, vsync: this);
+  }
+
+  Future<void> _checkAuthentication() async {
+    bool isAuthenticated = await SharedService.isLoggedIn();
+    if (!isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
+  Future<void> setUserInfos() async {
+    User? user = await UserService.getUserInfos();
+    setState(() {
+      this.user = user!;
+    });
   }
 
   @override
@@ -229,7 +252,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       CupertinoTextField(
         style:
             TextStyle(color: Colors.black, fontFamily: "Nunito", fontSize: 13),
-        placeholder: 'Votre Nom de Famille',
+        placeholder: '${user.lastName}',
         placeholderStyle: TextStyle(
             color: Color.fromRGBO(103, 103, 103, 0.7333333333333333),
             fontSize: 13),
@@ -239,6 +262,9 @@ class _UpdateProfileState extends State<UpdateProfile>
           borderRadius: BorderRadius.circular(8),
           boxShadow: [MyAppBoxShadow.boxShadowSecond],
         ),
+        onChanged: (value) {
+          user.lastName = value;
+        },
       ),
       const SizedBox(
         height: 10,
@@ -273,7 +299,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       CupertinoTextField(
         style:
             TextStyle(color: Colors.black, fontFamily: "Nunito", fontSize: 13),
-        placeholder: 'Votre Prénom',
+        placeholder: '${user.firstName}',
         placeholderStyle: TextStyle(
             color: Color.fromRGBO(103, 103, 103, 0.7333333333333333),
             fontSize: 13),
@@ -283,6 +309,9 @@ class _UpdateProfileState extends State<UpdateProfile>
           borderRadius: BorderRadius.circular(8),
           boxShadow: [MyAppBoxShadow.boxShadowSecond],
         ),
+        onChanged: (value) {
+          user.firstName = value;
+        },
       ),
       const SizedBox(
         height: 20,
@@ -318,7 +347,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       CupertinoTextField(
         style:
             TextStyle(color: Colors.black, fontFamily: "Nunito", fontSize: 13),
-        placeholder: 'Numero telephone',
+        placeholder: '${user.phoneNumber}',
         placeholderStyle: TextStyle(
             color: Color.fromRGBO(103, 103, 103, 0.7333333333333333),
             fontSize: 13),
@@ -328,6 +357,9 @@ class _UpdateProfileState extends State<UpdateProfile>
           borderRadius: BorderRadius.circular(8),
           boxShadow: [MyAppBoxShadow.boxShadowSecond],
         ),
+        onChanged: (value) {
+          user.phoneNumber = value;
+        },
       ),
       const SizedBox(
         height: 20,
@@ -362,7 +394,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       CupertinoTextField(
         style:
             TextStyle(color: Colors.black, fontFamily: "Nunito", fontSize: 13),
-        placeholder: 'saidmounjisam@gmail@gmail.com',
+        placeholder: '${user.email}',
         placeholderStyle: TextStyle(
             color: Color.fromRGBO(103, 103, 103, 0.7333333333333333),
             fontSize: 13),
@@ -372,6 +404,9 @@ class _UpdateProfileState extends State<UpdateProfile>
           borderRadius: BorderRadius.circular(8),
           boxShadow: [MyAppBoxShadow.boxShadowSecond],
         ),
+        onChanged: (value) {
+          user.email = value;
+        },
       ),
       const SizedBox(
         height: 20,
@@ -380,7 +415,27 @@ class _UpdateProfileState extends State<UpdateProfile>
         padding: EdgeInsets.symmetric(horizontal: 10),
         width: double.infinity,
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              isApiCallProcess = true;
+            });
+
+            UserService.updateUser(user).then((response) {
+              setState(() {
+                isApiCallProcess = false;
+              });
+
+              if (response != null) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile()),
+                );
+              }
+              setState(() {
+                isApiCallProcess = false;
+              });
+            });
+          },
           height: 60,
           color: Colors.deepOrange,
           child: Text(

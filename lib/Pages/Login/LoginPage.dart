@@ -32,9 +32,10 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,20 +86,20 @@ class _LoginPageState extends State<LoginPage> {
                       width: 30,
                     ),
                   ],
-                ) // Remplacez par votre image de connexion
+                )
                     ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     children: [
                       Container(
-                        width: 10, // Set the width of the container
-                        height: 10, // Set the height of the container
+                        width: 10, 
+                        height: 10, 
                         decoration: BoxDecoration(
                           color: Colors
-                              .deepOrange, // Set the background color of the container
+                              .deepOrange, 
                           borderRadius: BorderRadius.circular(
-                              50), // Set the border radius to 50% of the width/height
+                              50),
                         ),
                       ),
                       Expanded(
@@ -110,13 +111,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Container(
-                        width: 10, // Set the width of the container
-                        height: 10, // Set the height of the container
+                        width: 10, 
+                        height: 10, 
                         decoration: BoxDecoration(
                           color: Colors
-                              .deepOrange, // Set the background color of the container
+                              .deepOrange, 
                           borderRadius: BorderRadius.circular(
-                              50), // Set the border radius to 50% of the width/height
+                              50),
                         ),
                       ),
                     ],

@@ -1,15 +1,13 @@
-import 'package:deliver_ease/Pages/Login/LoginPage.dart';
-import 'package:deliver_ease/Pages/Menu/Profile/UserProfile.dart';
+import 'package:deliver_ease/Models/demande_model.dart';
+import 'package:deliver_ease/Services/delivery_service.dart';
 import 'package:deliver_ease/Widgets/MakeCardColieTrajet.dart';
-import 'package:deliver_ease/Models/colie_model.dart';
-import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
-import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:deliver_ease/Services/parcel_service.dart';
+
 class ListColiesTrajet extends StatefulWidget {
-  const ListColiesTrajet({Key? key}) : super(key: key);
+  final int trajetId;
+  const ListColiesTrajet({super.key, required this.trajetId});
 
   @override
   State<ListColiesTrajet> createState() => _ListColiesTrajetState();
@@ -18,19 +16,19 @@ class ListColiesTrajet extends StatefulWidget {
 class _ListColiesTrajetState extends State<ListColiesTrajet> {
   var screenWidth;
 
-  List<Colie> colies = [];
-    @override
+  List<Demande> demandes = [];
+  @override
   void initState() {
     super.initState();
-    setColies();
+    setDemandes();
   }
 
-  void setColies() async {
-    List<Colie>? colies = await ColieService.getAllColie();
+  void setDemandes() async {
+    List<Demande>? demandes = await DeliveryService.getDemands(widget.trajetId);
     setState(() {
-      this.colies = colies ?? [];
+      this.demandes = demandes ?? [];
     });
-    print(this.colies);
+    print(this.demandes);
   }
 
   @override
@@ -103,8 +101,8 @@ class _ListColiesTrajetState extends State<ListColiesTrajet> {
                   color: MyAppColors.orangeLight2,
                 ),
                 Column(
-                  children: List.generate(colies.length, (index) {
-                    return MakeCardColieTrajet(colieData: colies[index]);
+                  children: List.generate(demandes.length, (index) {
+                    return MakeCardColieTrajet(colieData: demandes[index]);
                   }),
                 )
               ],
