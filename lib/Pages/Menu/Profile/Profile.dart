@@ -26,6 +26,7 @@ class _ProfileState extends State<Profile> {
   var width, height;
   var isSender;
   var isDeliveryPerson;
+  String phoneNumber = "0600000000";
 
   @override
   void initState() {
@@ -55,6 +56,14 @@ class _ProfileState extends State<Profile> {
     User? user = await UserService.getUserInfos();
     bool isSender = await SharedService.isSender();
     bool isDeliveryPerson = await SharedService.isDelivery_PERSON();
+    if(isSender)
+    setState(() {
+      this.phoneNumber = "0660119273";
+    });
+    if(isDeliveryPerson)
+    setState(() {
+      this.phoneNumber = "0701020304";
+    });
     setState(() {
       this.user = user!;
       this.isSender = isSender;
@@ -158,7 +167,7 @@ class _ProfileState extends State<Profile> {
                         makeCardInformation(
                             "assets/images/icon_gmail_3.png", "${user.email}"),
                         makeCardInformation("assets/images/icon_telephone.png",
-                            "${user.phoneNumber}"),
+                            "${phoneNumber}"),
                       ],
                     ),
                     SizedBox(

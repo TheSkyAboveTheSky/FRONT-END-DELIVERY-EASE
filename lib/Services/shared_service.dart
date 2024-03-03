@@ -23,14 +23,8 @@ class SharedService {
         key: "login_details", value: json.encode(loginResponse.toJson()));
   }
 
-  static Future<void> logout(BuildContext context) async {
+  static Future<void> logout() async {
     await _secureStorage.delete(key: "login_details");
-
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/login',
-      (route) => false,
-    );
   }
 
   static Future<String> getToken() async {

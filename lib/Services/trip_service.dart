@@ -33,6 +33,32 @@ class TrajetService {
     }
   }
 
+  static Future<List<Trajet>?> getUserAllTrajet(int id) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
+    try {
+      var response = await client.get(
+        Uri.parse(APIConfig.API_URL + APIConfig.TRIP_URL + "/all/${id}"),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 200) {
+        List<Trajet> trajets = [];
+        for (var trajet in jsonDecode(response.body)) {
+          trajets.add(Trajet.fromJson(trajet));
+        }
+        return trajets;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error in GetUserAllTrajets: $e');
+      return null;
+    }
+  }
+
   static Future<bool?> addTrajet(Trajet model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

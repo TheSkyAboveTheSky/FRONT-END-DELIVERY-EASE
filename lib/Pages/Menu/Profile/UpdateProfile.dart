@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Pages/Login/LoginPage.dart';
 import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
@@ -23,7 +25,7 @@ class _UpdateProfileState extends State<UpdateProfile>
   late TabController _tabController = TabController(length: 2, vsync: this);
   final ImagePicker _picker = ImagePicker();
   bool isApiCallProcess = false;
-
+  String phoneNumber = "0600000000";
   var screenWidth;
   XFile? _imageFile;
 
@@ -38,12 +40,26 @@ class _UpdateProfileState extends State<UpdateProfile>
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (!isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
     }
   }
 
   Future<void> setUserInfos() async {
     User? user = await UserService.getUserInfos();
+    if(user?.role == Role.SENDER)
+    {
+      setState(() {
+        phoneNumber = "0660119273";
+      });
+    }else if (user?.role == Role.DELIVERY_PERSON)
+    {
+      setState(() {
+        phoneNumber = "0660119273";
+      });
+    }
     setState(() {
       this.user = user!;
     });
@@ -223,16 +239,13 @@ class _UpdateProfileState extends State<UpdateProfile>
   Widget updateInformations() {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 1.0),
         child: Row(
           children: [
             Container(
               width: 20,
               height: 20,
               child: Image(image: AssetImage("assets/images/nom_icon.png")),
-            ),
-            const SizedBox(
-              width: 5,
             ),
             Text(
               "Nom".toUpperCase(),
@@ -247,7 +260,7 @@ class _UpdateProfileState extends State<UpdateProfile>
         ),
       ),
       const SizedBox(
-        height: 10,
+        height: 5,
       ),
       CupertinoTextField(
         style:
@@ -347,7 +360,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       CupertinoTextField(
         style:
             TextStyle(color: Colors.black, fontFamily: "Nunito", fontSize: 13),
-        placeholder: '${user.phoneNumber}',
+        placeholder: '${phoneNumber}',
         placeholderStyle: TextStyle(
             color: Color.fromRGBO(103, 103, 103, 0.7333333333333333),
             fontSize: 13),

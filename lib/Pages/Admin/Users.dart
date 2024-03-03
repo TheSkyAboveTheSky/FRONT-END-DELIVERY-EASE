@@ -1,3 +1,4 @@
+import 'package:deliver_ease/Models/Enums/role.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Pages/Admin/UserInfo.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
@@ -185,7 +186,7 @@ class _UsersState extends State<Users> {
                       fontSize: 11),
                 ),
                 Text(
-                  "${user.role}".toString().split(".").last,
+                user.role == Role.SENDER ? "Expéditeur" : "Livreur",
                   style: TextStyle(
                       color: Colors.black45,
                       fontFamily: "Montserrat",

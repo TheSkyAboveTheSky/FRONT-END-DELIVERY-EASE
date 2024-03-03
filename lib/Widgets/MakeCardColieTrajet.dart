@@ -86,7 +86,7 @@ class _MakeCardColieState extends State<MakeCardColieTrajet> {
             height: 10,
           ),
           Text(
-            (widget.colieData.description ?? '').toUpperCase(),
+            (widget.colieData.description ?? '2kg riz').toUpperCase(),
             style: const TextStyle(
               color: Colors.black,
               fontFamily: "Montserrat",

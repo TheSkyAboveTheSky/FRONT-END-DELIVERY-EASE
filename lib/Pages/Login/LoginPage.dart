@@ -1,15 +1,15 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:deliver_ease/Pages/Register/RegisterPage.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/Models/user_model.dart';
-import 'package:deliver_ease/Services/api_service.dart';
+import 'package:deliver_ease/Services/auth_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Pages/Register/RegisterForm.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isApiCallProcess = false;
   String? email;
   String? password;
+  bool _passwordVisible = false;
 
   @override
   void initState() {
@@ -32,7 +33,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
@@ -86,20 +88,17 @@ class _LoginPageState extends State<LoginPage> {
                       width: 30,
                     ),
                   ],
-                )
-                    ),
+                )),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Row(
                     children: [
                       Container(
-                        width: 10, 
-                        height: 10, 
+                        width: 10,
+                        height: 10,
                         decoration: BoxDecoration(
-                          color: Colors
-                              .deepOrange, 
-                          borderRadius: BorderRadius.circular(
-                              50),
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.circular(50),
                         ),
                       ),
                       Expanded(
@@ -111,13 +110,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Container(
-                        width: 10, 
-                        height: 10, 
+                        width: 10,
+                        height: 10,
                         decoration: BoxDecoration(
-                          color: Colors
-                              .deepOrange, 
-                          borderRadius: BorderRadius.circular(
-                              50),
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.circular(50),
                         ),
                       ),
                     ],
@@ -233,6 +230,21 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: const [MyAppBoxShadow.boxShadowSecond],
                         ),
+                        obscureText: !_passwordVisible,
+                        suffix: CupertinoButton(
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                          padding: EdgeInsets.all(0),
+                          child: Icon(
+                            _passwordVisible
+                                ? CupertinoIcons.eye
+                                : CupertinoIcons.eye_slash,
+                            color: Colors.black,
+                          ),
+                        ),
                         onChanged: (value) {
                           password = value;
                         },
@@ -274,9 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                             });
                           }
                         });
-                      
                       }
-                    
                     },
                     height: 60,
                     color: Colors.deepOrange,
@@ -304,7 +314,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterForm()),
+                              builder: (context) => RegisterPage()),
                         );
                       },
                       child: const Text(

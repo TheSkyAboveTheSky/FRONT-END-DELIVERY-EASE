@@ -26,7 +26,7 @@ class _TrajetLivreurState extends State<TrajetLivreur> {
   }
 
   void setTrajets() async {
-    List<Trajet>? trajets = await TrajetService.getAllTrajet();
+    List<Trajet>? trajets = await TrajetService.getUserAllTrajet(widget.user.id!);
     setState(() {
       this.trajets = trajets ?? [];
     });

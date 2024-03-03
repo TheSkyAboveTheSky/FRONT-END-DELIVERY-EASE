@@ -3,7 +3,7 @@ import 'package:deliver_ease/Models/Enums/role.dart';
 import 'package:deliver_ease/Models/Enums/accountStatus.dart';
 
 class User {
-  User({this.email, this.firstName, this.lastName, this.role, this.rating});
+  User({this.email, this.firstName, this.lastName, this.role, this.rating , this.phoneNumber});
 
   String? email;
   String? firstName;
@@ -20,9 +20,16 @@ class User {
     lastName = json['lastName'];
     role = _parseRole(json['role']);
     rating = json['rating'];
-    phoneNumber = json['phoneNumber'] ?? "000";
     id = json['id'] ?? null;
     accountStatus = _parseAccountStatus(json['accountStatus']) ?? AccountStatus.ACTIVATED;
+    if (json['role'] == "SENDER") {
+      phoneNumber = "0660119273";
+    } else if (json['role']== "DELIVERY_PERSON") {
+      phoneNumber = "0701020304";
+    }else {
+      phoneNumber = "0600000000";
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -104,6 +111,7 @@ class RegisterRequestModel {
     this.firstName,
     this.lastName,
     this.role,
+    this.phoneNumber,
   });
 
   String? email;
@@ -111,6 +119,7 @@ class RegisterRequestModel {
   String? firstName;
   String? lastName;
   Role? role;
+  String? phoneNumber;
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -118,6 +127,7 @@ class RegisterRequestModel {
     firstName = json['firstName'];
     lastName = json['lastName'];
     role = _parseRole(json['role']);
+    phoneNumber = json['phoneNumber'];
     ;
   }
 
@@ -128,6 +138,7 @@ class RegisterRequestModel {
       'lastName': lastName,
       'password': password,
       'role': role?.toJsonString(),
+      'phoneNumber': phoneNumber,
     };
     return data;
   }

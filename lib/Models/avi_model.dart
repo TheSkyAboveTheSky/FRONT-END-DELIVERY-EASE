@@ -18,7 +18,7 @@ class Avi {
 
   Avi.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    starRating = json['starRating'];
+    starRating =5;
     comment = json['comment'];
     reviewDate = DateTime.parse(json['reviewDate']);
     user = User.fromJson(json['user']) ?? User();

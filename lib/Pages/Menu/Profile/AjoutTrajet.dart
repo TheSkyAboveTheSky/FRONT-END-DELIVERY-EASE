@@ -5,6 +5,7 @@ import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AjouterTrajet extends StatefulWidget {
   const AjouterTrajet({Key? key}) : super(key: key);
@@ -36,18 +37,59 @@ class _AjouterTrajetState extends State<AjouterTrajet> {
       return null;
     }
 
+    DateTime? selectedDate1 = DateTime.now();
+    DateTime? selectedDate2 = DateTime.now();
+
+    Future<void> _selectDate(
+        {required BuildContext context,
+        required TextEditingController controller,
+        required DateTime date}) async {
+      final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: date ?? DateTime.now(),
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2025),
+      );
+      if (pickedDate != null && pickedDate != date) {
+        final TimeOfDay? pickedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(date ?? DateTime.now()),
+        );
+        if (pickedTime != null) {
+          setState(() {
+            date = DateTime(
+              pickedDate.year,
+              pickedDate.month,
+              pickedDate.day,
+              pickedTime.hour,
+              pickedTime.minute,
+            );
+            controller.text = DateFormat('yyyy-MM-dd – HH:mm').format(date!);
+          });
+        }
+      }
+    }
+
     Future<bool?> sendTrajet() async {
       if (_expeditionController.text != "" &&
           _destinationController.text != "" &&
           _coutController.text != "" &&
-          _descriptionController.text != "") {
+          _descriptionController.text != "" &&
+          _dateDebutController.text != "" &&
+          _dateFinController.text != "") {
         Trajet trajet = Trajet(
             departureAddress: Address(city: _expeditionController.text),
             arrivalAddress: Address(city: _destinationController.text),
-            departureDate: DateTime.now(),
-            arrivalDate: DateTime.now(),
+            departureDate: selectedDate1 ?? DateTime.now(),
+            arrivalDate: selectedDate2 ?? DateTime.now(),
             cost: double.parse(_coutController.text),
             description: _descriptionController.text);
+        _expeditionController.text = "";
+        _destinationController.text = "";
+        _coutController.text = "";
+        _descriptionController.text = "";
+        _dateDebutController.text = "";
+        _dateFinController.text = "";
         return await TrajetService.addTrajet(trajet);
       }
       return false;
@@ -172,17 +214,77 @@ class _AjouterTrajetState extends State<AjouterTrajet> {
                         controller: _coutController,
                         inputType: TextInputType.number),
                     const SizedBox(height: 20),
-                    _buildInputRow(
-                        icon: 'assets/images/icon_start.png',
-                        label: 'Date  d\'expédition ',
-                        controller: _dateDebutController,
-                        hint: "yyyy-MM-ddTHH:mm:ss"),
+                    GestureDetector(
+                        onTap: () => _selectDate(
+                            context: context,
+                            controller: _dateDebutController,
+                            date: selectedDate1),
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: MyAppColors.whiteCardColor,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                            ),
+                            child: Row(children: [
+                              Image(
+                                image: AssetImage(
+                                  "assets/images/icon_start.png",
+                                ),
+                                width: 20,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                _dateDebutController.text.toString() != ""
+                                    ? _dateDebutController.text.toString()
+                                    : "Choisir date debut du trajet"
+                                        .toUpperCase(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ]))),
                     const SizedBox(height: 20),
-                    _buildInputRow(
-                        icon: 'assets/images/icon_end.png',
-                        label: 'Date  déstination ',
-                        controller: _dateFinController,
-                        hint: "yyyy-MM-ddTHH:mm:ss"),
+                    GestureDetector(
+                        onTap: () => _selectDate(
+                            context: context,
+                            controller: _dateFinController,
+                            date: selectedDate2),
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: MyAppColors.whiteCardColor,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                            ),
+                            child: Row(children: [
+                              Image(
+                                image: AssetImage(
+                                  "assets/images/icon_start.png",
+                                ),
+                                width: 20,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                _dateFinController.text.toString() != ""
+                                    ? _dateFinController.text.toString()
+                                    : "Choisir date fin du trajet"
+                                        .toUpperCase(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ]))),
                     const SizedBox(height: 20),
                     _buildInputRow(
                       icon: 'assets/images/icon_description.png',

@@ -154,11 +154,11 @@ class _UserInfoState extends State<UserInfo> {
                               if (isDeliveryPerson)
                                 makeCardInformation(
                                     "assets/images/icon_livreur.png",
-                                    "${widget.user.role.toString().split('.').last}"),
+                                    "Livreur"),
                               if (isSender)
                                 makeCardInformation(
-                                    "assets/images/icon_livreur.png",
-                                    "${widget.user.role.toString().split('.').last}"),
+                                    "assets/images/nom_icon.png",
+                                    "Expéditeur"),
                             ],
                           ),
                           SizedBox(

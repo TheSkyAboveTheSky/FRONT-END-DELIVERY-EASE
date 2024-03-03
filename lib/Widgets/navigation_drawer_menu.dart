@@ -134,6 +134,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                 ],
               ),
             ),
+            buildMenuItem(text: "Se Deconnecter", icon: "assets/images/icon_logout.png",onClicked: () => selectedItem(context, 6)),
           ],
         ),
       ),
@@ -239,6 +240,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AjouterTrajet(),
+        ));
+        break;
+      case 6:
+        SharedService.logout();
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => LoginPage(),
         ));
         break;
     }

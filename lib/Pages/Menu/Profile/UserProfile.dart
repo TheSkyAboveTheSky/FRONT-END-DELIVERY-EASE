@@ -28,6 +28,7 @@ class _UserProfileState extends State<UserProfile> {
   List<Colie> colies = [];
   var isSender = false;
   var isDeliveryPerson = false;
+  String phoneNumber = "";
 
   @override
   void initState() {
@@ -52,11 +53,14 @@ class _UserProfileState extends State<UserProfile> {
     List<Avi>? avis;
     if (isDeliveryPerson) {
       avis = await ReviewService.getUserAvis(await SharedService.getId());
+      phoneNumber = "0701020304";
     } else {
       avis = await ReviewService.getUserAvis(widget.user.id!);
+      phoneNumber = "0660119273";
     }
     setState(() {
       this.avis = avis ?? [];
+      this.phoneNumber = phoneNumber;
     });
   }
 
@@ -165,7 +169,7 @@ class _UserProfileState extends State<UserProfile> {
                                 "${widget.user.email}"),
                             makeCardInformation(
                                 "assets/images/icon_telephone.png",
-                                "${widget.user.phoneNumber}"),
+                                "${phoneNumber}"),
                           ],
                         ),
                         SizedBox(
