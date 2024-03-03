@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,9 +8,12 @@ import 'dart:async';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Pages/Register/RegisterForm.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 
 class VerificationScreen extends StatefulWidget {
-  const VerificationScreen({Key? key}) : super(key: key);
+  final Role role;
+  final PhoneNumber phone;
+  const VerificationScreen({super.key, required this.role, required this.phone});
 
   @override
   VerificationScreenState createState() => VerificationScreenState();
@@ -75,7 +80,8 @@ class VerificationScreenState extends State<VerificationScreen> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/menu');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
@@ -158,7 +164,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                     delay: const Duration(milliseconds: 500),
                     duration: const Duration(milliseconds: 500),
                     child: Text(
-                      "Please enter the 4 digit code sent to \n +93 706-399-999",
+                      "Please enter the 4 digit code sent to \n +${widget.phone.countryCode} ${widget.phone.nsn}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 16,
@@ -170,7 +176,6 @@ class VerificationScreenState extends State<VerificationScreen> {
                     height: 30,
                   ),
 
-                  // Verification Code Input
                   FadeInDown(
                     delay: const Duration(milliseconds: 600),
                     duration: const Duration(milliseconds: 500),
@@ -228,7 +233,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       onPressed: _code.length < 4
                           ? () => {}
                           : () {
-                              verify();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterForm(role: widget.role, phone: "+${widget.phone.countryCode} ${widget.phone.nsn}")));
                             },
                       color: Colors.deepOrange,
                       minWidth: MediaQuery.of(context).size.width * 0.8,

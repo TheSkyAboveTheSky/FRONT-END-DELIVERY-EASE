@@ -1,25 +1,35 @@
 import 'dart:convert';
 import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Models/Enums/accountStatus.dart';
 
 class User {
-  User({
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.role,
-  });
+  User({this.email, this.firstName, this.lastName, this.role, this.rating , this.phoneNumber});
 
   String? email;
   String? firstName;
   String? lastName;
   Role? role;
+  double? rating;
+  String? phoneNumber;
+  int? id;
+  AccountStatus? accountStatus;
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     role = _parseRole(json['role']);
-    ;
+    rating = json['rating'];
+    id = json['id'] ?? null;
+    accountStatus = _parseAccountStatus(json['accountStatus']) ?? AccountStatus.ACTIVATED;
+    if (json['role'] == "SENDER") {
+      phoneNumber = "0660119273";
+    } else if (json['role']== "DELIVERY_PERSON") {
+      phoneNumber = "0701020304";
+    }else {
+      phoneNumber = "0600000000";
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +38,10 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'role': role?.toJsonString(),
+      'rating': rating,
+      'phoneNumber': phoneNumber,
+      'id': id,
+      'accountStatus': accountStatus?.toJsonString()
     };
     return data;
   }
@@ -97,6 +111,7 @@ class RegisterRequestModel {
     this.firstName,
     this.lastName,
     this.role,
+    this.phoneNumber,
   });
 
   String? email;
@@ -104,6 +119,7 @@ class RegisterRequestModel {
   String? firstName;
   String? lastName;
   Role? role;
+  String? phoneNumber;
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -111,6 +127,7 @@ class RegisterRequestModel {
     firstName = json['firstName'];
     lastName = json['lastName'];
     role = _parseRole(json['role']);
+    phoneNumber = json['phoneNumber'];
     ;
   }
 
@@ -121,6 +138,7 @@ class RegisterRequestModel {
       'lastName': lastName,
       'password': password,
       'role': role?.toJsonString(),
+      'phoneNumber': phoneNumber,
     };
     return data;
   }
@@ -164,5 +182,19 @@ Role? _parseRole(String? roleStr) {
       return Role.DELIVERY_PERSON;
     default:
       throw ArgumentError('Unknown Role: $roleStr');
+  }
+}
+
+AccountStatus? _parseAccountStatus(String? accountStatusStr) {
+  if (accountStatusStr == null) {
+    return AccountStatus.ACTIVATED;
+  }
+  switch (accountStatusStr.toUpperCase()) {
+    case 'ACTIVATED':
+      return AccountStatus.ACTIVATED;
+    case 'DEACTIVATED':
+      return AccountStatus.DEACTIVATED;
+    default:
+      throw ArgumentError('Unknown AccountStatus: $accountStatusStr');
   }
 }

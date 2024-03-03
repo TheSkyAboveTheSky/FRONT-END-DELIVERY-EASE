@@ -43,10 +43,10 @@ class Colie {
     switch (status) {
       case 'UNCONFIRMED':
         return Status.UNCONFIRMED;
-      case 'CONFIRMED':
-        return Status.CONFIRMED;
-      case 'IN_PROGRESS':
-        return Status.IN_PROGRESS;
+      case 'UNSELECTED':
+        return Status.UNSELECTED;
+      case 'REFUSED':
+        return Status.REFUSED;
       case 'ACCEPTED':
         return Status.ACCEPTED;
       case 'IN_TRANSIT':

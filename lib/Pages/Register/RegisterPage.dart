@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/Pages/Register/Phone.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
@@ -23,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/menu');
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
@@ -83,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PhoneForm()),
+                                builder: (context) => PhoneForm(role: Role.DELIVERY_PERSON)),
                           )
                         },
                         child: Container(
@@ -121,6 +123,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: 5,
                       ),
                       FadeInRight(
+                          child: GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PhoneForm(role:Role.SENDER)),
+                          )
+                        },
                         child: Container(
                           width: 150,
                           height: 150,
@@ -134,8 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               children: [
                                 Container(
                                   width: 50,
-                                  child:
-                                      Image.asset("assets/images/client.png"),
+                                  child: Image.asset("assets/images/client.png"),
                                 ),
                                 SizedBox(
                                   height: 15,
@@ -151,11 +160,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                      )
+                      )),
                     ],
-                  ),
-                  SizedBox(
-                    height: 40,
                   ),
                   Container(
                     child: Center(

@@ -1,32 +1,35 @@
 import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
-import 'package:deliver_ease/Pages/Profle/profile.dart';
 import 'package:deliver_ease/Models/user_model.dart';
-import 'package:deliver_ease/Services/api_service.dart';
+import 'package:deliver_ease/Services/auth_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:deliver_ease/Models/Enums/role.dart';
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({Key? key}) : super(key: key);
-
+  final Role role;
+  final String phone;
+  const RegisterForm({Key? key, required this.role, required this.phone})
+      : super(key: key);
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  // Image picker
   final ImagePicker _picker = ImagePicker();
   bool isApiCallProcess = false;
-  String? name;
+  String? firstName;
+  String? lastName;
   String? email;
   String? password;
+  bool _passwordVisible = false;
 
   XFile? _imageFile;
   @override
@@ -38,7 +41,8 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/menu');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
@@ -172,7 +176,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 color: Colors.black,
                                 fontFamily: "Nunito",
                                 fontSize: 13),
-                            placeholder: 'Votre nom complet',
+                            placeholder: 'Votre Nom',
                             placeholderStyle: const TextStyle(
                                 color: Color.fromRGBO(
                                     103, 103, 103, 0.7333333333333333),
@@ -185,7 +189,31 @@ class _RegisterFormState extends State<RegisterForm> {
                               boxShadow: [MyAppBoxShadow.boxShadowSecond],
                             ),
                             onChanged: (value) {
-                              name = value;
+                              firstName = value;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CupertinoTextField(
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: "Nunito",
+                                fontSize: 13),
+                            placeholder: 'Votre nom de famille',
+                            placeholderStyle: const TextStyle(
+                                color: Color.fromRGBO(
+                                    103, 103, 103, 0.7333333333333333),
+                                fontSize: 13),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
+                            decoration: BoxDecoration(
+                              color: MyAppColors.whiteCardColor,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                            ),
+                            onChanged: (value) {
+                              lastName = value;
                             },
                           ),
                           const SizedBox(
@@ -226,7 +254,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 color: Colors.black,
                                 fontFamily: "Nunito",
                                 fontSize: 13),
-                            placeholder: 'Ayoubseddiki132@gmail.com',
+                            placeholder: 'saidmounjisam@gmail.com',
                             placeholderStyle: const TextStyle(
                                 color: Color.fromRGBO(
                                     103, 103, 103, 0.7333333333333333),
@@ -286,11 +314,26 @@ class _RegisterFormState extends State<RegisterForm> {
                                     103, 103, 103, 0.7333333333333333),
                                 fontSize: 13),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 16),
+                                horizontal: 16, vertical: 20),
                             decoration: BoxDecoration(
                               color: MyAppColors.whiteCardColor,
                               borderRadius: BorderRadius.circular(8),
-                              boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                              boxShadow: const [MyAppBoxShadow.boxShadowSecond],
+                            ),
+                            obscureText: !_passwordVisible,
+                            suffix: CupertinoButton(
+                              onPressed: () {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
+                              padding: EdgeInsets.all(0),
+                              child: Icon(
+                                _passwordVisible
+                                    ? CupertinoIcons.eye
+                                    : CupertinoIcons.eye_slash,
+                                color: Colors.black,
+                              ),
                             ),
                             onChanged: (value) {
                               password = value;
@@ -314,9 +357,11 @@ class _RegisterFormState extends State<RegisterForm> {
                             RegisterRequestModel model = RegisterRequestModel(
                               email: email,
                               password: password,
-                              firstName: name,
-                              lastName: name,
+                              firstName: firstName,
+                              lastName: lastName,
                               role: Role.SENDER,
+                              phoneNumber: widget.phone,
+                              
                             );
                             APIService.register(model).then((response) {
                               setState(() {
@@ -403,7 +448,10 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void _uploadPhoto() {}
   bool validateAndSave() {
-    if (email!.isEmpty || password!.isEmpty || name!.isEmpty) {
+    if (email!.isEmpty ||
+        password!.isEmpty ||
+        firstName!.isEmpty ||
+        lastName!.isEmpty) {
       return false;
     }
     return true;

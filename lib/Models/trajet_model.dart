@@ -1,5 +1,6 @@
 import 'package:deliver_ease/Models/address_model.dart';
 import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Services/user_service.dart';
 
 class Trajet {
   Trajet({
@@ -10,7 +11,6 @@ class Trajet {
     this.arrivalDate,
     this.cost,
     this.description,
-    this.user,
   });
 
   int? id;
@@ -28,9 +28,9 @@ class Trajet {
     arrivalAddress = Address.fromJson(json['arrivalAddress']);
     departureDate = DateTime.parse(json['departureDate']);
     arrivalDate = DateTime.parse(json['arrivalDate']);
-    cost = json['cost'];
-    description = json['description'];
-    user = User.fromJson(json['user']);
+    cost = json['cost'] ?? 0.0;
+    description = json['description'] ?? "";
+    user = User.fromJson(json['user']) ?? User();
   }
 
   Map<String, dynamic> toJson() {
