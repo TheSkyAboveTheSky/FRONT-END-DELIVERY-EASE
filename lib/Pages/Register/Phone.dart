@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:deliver_ease/Models/Enums/role.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +11,8 @@ import 'package:phone_form_field/phone_form_field.dart';
 import 'package:deliver_ease/Services/shared_service.dart';
 
 class PhoneForm extends StatefulWidget {
-  const PhoneForm({Key? key}) : super(key: key);
+  final Role role;
+  const PhoneForm({super.key, required this.role});
   @override
   PhoneFormState createState() => PhoneFormState();
 }
@@ -18,6 +21,7 @@ class PhoneFormState extends State<PhoneForm> {
   bool _isResendAgain = false;
   bool _isVerified = false;
   bool _isLoading = false;
+  late PhoneNumber phoneNumber ;
 
   String _code = '';
 
@@ -75,7 +79,8 @@ class PhoneFormState extends State<PhoneForm> {
   Future<void> _checkAuthentication() async {
     bool isAuthenticated = await SharedService.isLoggedIn();
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/menu');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
@@ -178,6 +183,11 @@ class PhoneFormState extends State<PhoneForm> {
                   showIsoCodeInInput: true,
                   showFlagInInput: true,
                   flagSize: 16,
+                  onChanged: (value) {
+                    setState(() {
+                      phoneNumber = value;
+                    });
+                  }
                 ),
               ),
               const SizedBox(
@@ -192,7 +202,7 @@ class PhoneFormState extends State<PhoneForm> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => VerificationScreen()),
+                          builder: (context) => VerificationScreen(role: widget.role,phone:phoneNumber)),
                     )
                   },
                   color: Colors.deepOrange,

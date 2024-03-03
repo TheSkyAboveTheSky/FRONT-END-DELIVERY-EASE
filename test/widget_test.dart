@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import 'package:deliver_ease/main.dart';
-import 'package:deliver_ease/Services/api_service.dart';
+import 'package:deliver_ease/Services/auth_service.dart';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:deliver_ease/Config/config.dart';
 

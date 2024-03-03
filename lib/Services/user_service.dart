@@ -7,25 +7,26 @@ import 'shared_service.dart';
 class UserService {
   static var client = http.Client();
 
-  static Future<User?> getUserById(int id) async {
+  static Future<User?> getUserInfos() async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
     try {
       var response = await client.get(
-        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + '/$id'),
+        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + '/getMyInfos'),
         headers: requestHeaders,
       );
-      print('Response: ${response.body}');
       if (response.statusCode == 200) {
-        print("User: ${User.fromJson(jsonDecode(response.body))}");
-        return User.fromJson(jsonDecode(response.body));
+        User user = User.fromJson(jsonDecode(response.body));
+        return user;
       } else {
-        return null;
+        return User();
       }
     } catch (e) {
-      print('Error in GetUserById: $e');
-      return null;
+      print('Error in GetUserInfos: $e');
+      return User();
     }
   }
 
@@ -33,12 +34,13 @@ class UserService {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
     try {
       var response = await client.get(
-        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL),
+        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + "/all"),
         headers: requestHeaders,
       );
-      print('Response: ${response.body}');
       if (response.statusCode == 200) {
         List<User> users = [];
         for (var user in jsonDecode(response.body)) {
@@ -58,6 +60,8 @@ class UserService {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
     try {
       var response = await client.delete(
         Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + '/$id'),
@@ -80,16 +84,30 @@ class UserService {
       'Content-Type': 'application/json',
     };
     String? token = await SharedService.getToken();
-    print('Token: $token');
     requestHeaders['Authorization'] = 'Bearer $token';
 
     try {
-      var response = await client.put(
-        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + "/upadateUserInfo"),
+      var body = {};
+      if (user.firstName != null) {
+        body['firstName'] = user.firstName;
+      }
+
+      if (user.lastName != null) {
+        body['lastName'] = user.lastName;
+      }
+
+      if (user.email != null) {
+        body['email'] = user.email;
+      }
+
+      if (user.phoneNumber != null) {
+        body['phoneNumber'] = user.phoneNumber;
+      }
+      var response = await client.patch(
+        Uri.parse(APIConfig.API_URL + APIConfig.USER_URL + "/updateUserInfo"),
         headers: requestHeaders,
-        body: jsonEncode(user.toJson()),
+        body: jsonEncode(body),
       );
-      print('Response: ${response.body}');
       if (response.statusCode == 200) {
         return User.fromJson(jsonDecode(response.body));
       } else {
@@ -100,4 +118,62 @@ class UserService {
       return null;
     }
   }
+
+  static Future<bool?> activerUserAccount(int id) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
+    var body = {
+      "accountStatus": "ACTIVATED",
+    };
+    try {
+      var response = await client.patch(
+        Uri.parse(APIConfig.API_URL +
+            APIConfig.USER_URL +
+            "/updateAccountStatus/$id"),
+        headers: requestHeaders,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error in ActiverUserAccount: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> deactiverUserAccount(int id) async 
+  {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    String? token = await SharedService.getToken();
+    requestHeaders['Authorization'] = 'Bearer $token';
+    var body = {
+      "accountStatus": "DEACTIVATED",
+    };
+    try {
+      var response = await client.patch(
+        Uri.parse(APIConfig.API_URL +
+            APIConfig.USER_URL +
+            "/updateAccountStatus/$id"),
+        headers: requestHeaders,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error in DesactiverUserAccount: $e');
+      return false;
+    }
+  }
+
 }

@@ -1,10 +1,21 @@
+import 'package:deliver_ease/Models/avi_model.dart';
+import 'package:deliver_ease/Models/colie_model.dart';
+import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Pages/Menu/Colies/ColieInformation.dart';
+import 'package:deliver_ease/Services/parcel_service.dart';
+import 'package:deliver_ease/Services/reviews_service.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UserProfile extends StatefulWidget {
+  final User user;
+  const UserProfile({super.key, required this.user});
+
   @override
   State<UserProfile> createState() => _UserProfileState();
 }
@@ -13,6 +24,57 @@ class _UserProfileState extends State<UserProfile> {
   var screenWidth;
   var popUpIsShowing = false;
   var width, height;
+  List<Avi> avis = [];
+  List<Colie> colies = [];
+  var isSender = false;
+  var isDeliveryPerson = false;
+  String phoneNumber = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _checkRoles();
+  }
+
+  void _checkRoles() async {
+    bool sender = await SharedService.isSender();
+    bool deliveryPerson = await SharedService.isDelivery_PERSON();
+
+    setState(() {
+      isSender = sender;
+      isDeliveryPerson = deliveryPerson;
+    });
+
+    setAvis();
+    setColies();
+  }
+
+  void setAvis() async {
+    List<Avi>? avis;
+    if (isDeliveryPerson) {
+      avis = await ReviewService.getUserAvis(await SharedService.getId());
+      phoneNumber = "0701020304";
+    } else {
+      avis = await ReviewService.getUserAvis(widget.user.id!);
+      phoneNumber = "0660119273";
+    }
+    setState(() {
+      this.avis = avis ?? [];
+      this.phoneNumber = phoneNumber;
+    });
+  }
+
+  void setColies() async {
+    List<Colie>? colies;
+    if (isDeliveryPerson) {
+      colies = await ColieService.getUserColies(widget.user.id!);
+    } else {
+      colies = await ColieService.getUserColies(await SharedService.getId());
+    }
+    setState(() {
+      this.colies = colies ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +90,7 @@ class _UserProfileState extends State<UserProfile> {
                     SafeArea(
                       child: Column(children: [
                         SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,7 +101,7 @@ class _UserProfileState extends State<UserProfile> {
                               },
                               child: Container(
                                   width: 40,
-                                  height: 40,
+                                  height: 50,
                                   margin: EdgeInsets.only(left: 20),
                                   decoration: BoxDecoration(
                                     color: Colors.black,
@@ -79,7 +141,8 @@ class _UserProfileState extends State<UserProfile> {
                           height: 5,
                         ),
                         Text(
-                          "Ayoub Seddiki".toUpperCase(),
+                          "${widget.user.lastName} ${widget.user.firstName}"
+                              .toUpperCase(),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -98,17 +161,15 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         Wrap(
                           alignment: WrapAlignment.center,
-                          spacing:
-                              10, // Espacement horizontal entre les éléments
-                          runSpacing:
-                              10, // Espacement vertical entre les lignes
+                          spacing: 10,
+                          runSpacing: 10,
                           children: [
                             makeCardInformation(
                                 "assets/images/icon_gmail_3.png",
-                                "ayoubseddiki132@gmail.com"),
+                                "${widget.user.email}"),
                             makeCardInformation(
                                 "assets/images/icon_telephone.png",
-                                "0643559539"),
+                                "${phoneNumber}"),
                           ],
                         ),
                         SizedBox(
@@ -139,7 +200,7 @@ class _UserProfileState extends State<UserProfile> {
                                     width: 5,
                                   ),
                                   Text(
-                                    "Vous Avez 5 colies en commun"
+                                    "Vous Avez ${colies.length} colies en commun"
                                         .toUpperCase(),
                                     style: TextStyle(
                                         color: MyAppColors.backgroundColor,
@@ -150,14 +211,15 @@ class _UserProfileState extends State<UserProfile> {
                                 ])),
                           ),
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        makeCardReview(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        makeCardReview(),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: avis.length,
+                            itemBuilder: (context, index) {
+                              Avi avi = avis[index];
+                              return makeCardReview(avi);
+                            },
+                          ),
+                        )
                       ]),
                     ),
                     AnimatedOpacity(
@@ -165,13 +227,17 @@ class _UserProfileState extends State<UserProfile> {
                       duration: const Duration(milliseconds: 500),
                       child: Visibility(
                         visible: popUpIsShowing,
-                        child: Container(
-                          width: width,
-                          height: height,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(194, 0, 0, 0),
+                        child: SingleChildScrollView(
+                          child: Container(
+                            width: width,
+                            height: height,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(194, 0, 0, 0),
+                            ),
+                            child: Expanded(
+                              child: renderPopUp(),
+                            ),
                           ),
-                          child: renderPopUp(),
                         ),
                       ),
                     )
@@ -182,128 +248,105 @@ class _UserProfileState extends State<UserProfile> {
   Widget renderPopUp() {
     return Center(
       child: Container(
-          width: width * 0.8,
-          height: height * 0.5,
+        width: width * 0.8,
+        height: height * 0.5,
+        decoration: BoxDecoration(
+          color: Color.fromARGB(194, 0, 0, 0),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            color: Color.fromARGB(194, 0, 0, 0),
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                Colors.white,
+                Colors.white,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    Colors.white,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Image(
+                      image: AssetImage("assets/images/logo2.png"),
+                      width: 25,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "colies en communs".toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Montserrat",
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(width: 5),
                     Expanded(
-                        child: Column(children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image(
-                              image: AssetImage("assets/images/logo2.png"),
-                              width: 25),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "colies en communs".toUpperCase(),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Expanded(
-                              child: Container(
-                            height: 1,
-                            color: Colors.deepOrange,
-                            width: double.infinity,
-                          )),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                popUpIsShowing = !popUpIsShowing;
-                              });
-                            },
-                            child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.black),
-                                child: Icon(
-                                  Icons.highlight_remove_outlined,
-                                  color: Colors.white,
-                                )),
-                          )
-                        ],
+                      child: Container(
+                        height: 1,
+                        color: Colors.deepOrange,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          /*
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ColieInformation()),
-                          );
-                          */
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: MyAppColors.backgroundColor,
-                              boxShadow: [MyAppBoxShadow.boxShadowSecond],
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Row(children: [
-                            Container(
-                                width: 40,
-                                height: 40,
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    color: Colors.deepOrange,
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      MyAppBoxShadow.boxShadowSecond
-                                    ]),
-                                child: Image(
-                                  image: AssetImage("assets/images/logo2.png"),
-                                  width: 20,
-                                )),
-                            SizedBox(width: 10),
-                            Container(
-                                width: 1, height: 20, color: Colors.deepOrange),
-                            SizedBox(width: 10),
-                            Text(
-                              "AZERTY - 923848",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13),
-                            ),
-                          ]),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          popUpIsShowing = !popUpIsShowing;
+                        });
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.black,
+                        ),
+                        child: Icon(
+                          Icons.highlight_remove_outlined,
+                          color: Colors.white,
                         ),
                       ),
-                    ])),
-                  ]),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: MyAppColors.backgroundColor,
+                      boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Expanded(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: colies.length,
+                          itemBuilder: (context, index) {
+                            Colie colie = colies[index];
+                            return makeCardColie(colie);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
@@ -338,16 +381,19 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget makeCardReview() {
+  Widget makeCardReview(Avi avi) {
     return Container(
         width: screenWidth * 0.9,
         padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 10, left: screenWidth * 0.05),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [MyAppBoxShadow.boxShadowSecond],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
               Container(
@@ -368,7 +414,7 @@ class _UserProfileState extends State<UserProfile> {
               ),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  "AYOUB SEDDIKI".toUpperCase(),
+                  "${avi.user?.lastName} ${avi.user?.firstName}".toUpperCase(),
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -376,7 +422,7 @@ class _UserProfileState extends State<UserProfile> {
                       fontSize: 11),
                 ),
                 Text(
-                  "10/01/2023".toUpperCase(),
+                  DateFormat('dd-MM-yyyy HH:mm').format(avi.reviewDate!),
                   style: TextStyle(
                       color: Colors.black26,
                       fontWeight: FontWeight.bold,
@@ -388,33 +434,19 @@ class _UserProfileState extends State<UserProfile> {
             SizedBox(
               height: 10,
             ),
-            Row(children: [
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              Icon(
-                Icons.star_border,
-                color: Colors.black45,
-              ),
-            ]),
+            Row(
+              children: [
+                for (int i = 0; i < avi.starRating!; i++)
+                  Icon(Icons.star, color: Colors.amber),
+                for (int i = avi.starRating! as int; i < 5; i++)
+                  Icon(Icons.star_border, color: Colors.black45),
+              ],
+            ),
             SizedBox(
               height: 10,
             ),
             Text(
-              "Le livreur était ponctuel et professionnel. La livraison s'est déroulée sans encombre, et le colis était parfaitement emballé. Service impeccable, je referai appel à ce livreur sans hésiter.",
+              avi.comment.toString().toUpperCase(),
               style: TextStyle(
                   fontFamily: "Montserrat",
                   fontSize: 11,
@@ -423,5 +455,62 @@ class _UserProfileState extends State<UserProfile> {
             )
           ],
         ));
+  }
+
+  Widget makeCardColie(colie) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ColieInformation(colie: colie)),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [MyAppBoxShadow.boxShadowSecond],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.deepOrange,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [MyAppBoxShadow.boxShadowSecond],
+                ),
+                child: Image(
+                  image: AssetImage("assets/images/logo2.png"),
+                  width: 20,
+                ),
+              ),
+              SizedBox(width: 10),
+              Container(
+                width: 1,
+                height: 20,
+                color: Colors.deepOrange,
+              ),
+              SizedBox(width: 10),
+              Text(
+                colie.identifier.toString().toUpperCase(),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

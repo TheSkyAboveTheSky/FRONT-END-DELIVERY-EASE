@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:deliver_ease/Models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:deliver_ease/Config/config.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class SharedService {
   static final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
@@ -25,14 +23,8 @@ class SharedService {
         key: "login_details", value: json.encode(loginResponse.toJson()));
   }
 
-  static Future<void> logout(BuildContext context) async {
+  static Future<void> logout() async {
     await _secureStorage.delete(key: "login_details");
-
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/login',
-      (route) => false,
-    );
   }
 
   static Future<String> getToken() async {
@@ -49,18 +41,16 @@ class SharedService {
     return "";
   }
 
-  static Future<String> getId() async {
+  static Future<int> getId() async {
     String? jsonString = await _secureStorage.read(key: "login_details");
     if (jsonString != null) {
       Map<String, dynamic> data = json.decode(jsonString);
-      String? id = data["idUserAuthenticated"];
+      int? id = data["id"];
       if (id != null) {
         return id;
-      } else {
-        return "";
       }
     }
-    return "";
+    return 0;
   }
 
   static Future<String> getRole() async {
@@ -75,5 +65,47 @@ class SharedService {
       }
     }
     return "";
+  }
+
+  static Future<bool> isAdmin() async {
+    String? jsonString = await _secureStorage.read(key: "login_details");
+    if (jsonString != null) {
+      Map<String, dynamic> data = json.decode(jsonString);
+      String? role = data["role"];
+      if (role != null) {
+        return role == "ADMIN";
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> isSender() async {
+    String? jsonString = await _secureStorage.read(key: "login_details");
+    if (jsonString != null) {
+      Map<String, dynamic> data = json.decode(jsonString);
+      String? role = data["role"];
+      if (role != null) {
+        return role == "SENDER";
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> isDelivery_PERSON() async {
+    String? jsonString = await _secureStorage.read(key: "login_details");
+    if (jsonString != null) {
+      Map<String, dynamic> data = json.decode(jsonString);
+      String? role = data["role"];
+      if (role != null) {
+        return role == "DELIVERY_PERSON";
+      } else {
+        return false;
+      }
+    }
+    return false;
   }
 }

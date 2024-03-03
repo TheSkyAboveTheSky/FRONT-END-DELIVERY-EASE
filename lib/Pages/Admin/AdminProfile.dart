@@ -1,33 +1,24 @@
-import 'package:deliver_ease/Pages/Admin/AdminProfile.dart';
+import 'package:deliver_ease/Models/user_model.dart';
+import 'package:deliver_ease/Pages/Admin/Users.dart';
 import 'package:deliver_ease/Pages/Login/LoginPage.dart';
-import 'package:deliver_ease/Pages/Menu/ChoisirDestination.dart';
-import 'package:deliver_ease/Pages/Menu/Colies/Colies.dart';
-import 'package:deliver_ease/Pages/Menu/Profile/AjoutTrajet.dart';
-import 'package:deliver_ease/Pages/Menu/Profile/DemandeLivreur.dart';
+import 'package:deliver_ease/Pages/Menu/Profile/Profile.dart';
 import 'package:deliver_ease/Pages/Menu/Profile/UpdateProfile.dart';
+import 'package:deliver_ease/Services/shared_service.dart';
+import 'package:deliver_ease/Services/user_service.dart';
 import 'package:deliver_ease/Widgets/navigation_drawer_menu.dart';
 import 'package:deliver_ease/utils/MyAppBoxShadow.dart';
 import 'package:deliver_ease/utils/MyAppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:deliver_ease/Services/shared_service.dart';
-import 'package:deliver_ease/Services/user_service.dart';
-import 'package:deliver_ease/Models/user_model.dart';
 
-class Profile extends StatefulWidget {
+class AdminProfile extends StatefulWidget {
   @override
-  State<Profile> createState() => _ProfileState();
+  State<AdminProfile> createState() => _AdminProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _AdminProfileState extends State<AdminProfile> {
   var user = User();
   var screenWidth;
-  var popUpIsShowing = false;
-  var width, height;
-  var isSender;
-  var isDeliveryPerson;
-  String phoneNumber = "0600000000";
-
   @override
   void initState() {
     super.initState();
@@ -46,28 +37,16 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _checkAdmin() async {
     bool isAdmin = await SharedService.isAdmin();
-    if (isAdmin) {
+    if (!isAdmin) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminProfile()));
+          context, MaterialPageRoute(builder: (context) => Profile()));
     }
   }
 
   Future<void> setUserInfos() async {
     User? user = await UserService.getUserInfos();
-    bool isSender = await SharedService.isSender();
-    bool isDeliveryPerson = await SharedService.isDelivery_PERSON();
-    if(isSender)
-    setState(() {
-      this.phoneNumber = "0660119273";
-    });
-    if(isDeliveryPerson)
-    setState(() {
-      this.phoneNumber = "0701020304";
-    });
     setState(() {
       this.user = user!;
-      this.isSender = isSender;
-      this.isDeliveryPerson = isDeliveryPerson;
     });
   }
 
@@ -167,7 +146,7 @@ class _ProfileState extends State<Profile> {
                         makeCardInformation(
                             "assets/images/icon_gmail_3.png", "${user.email}"),
                         makeCardInformation("assets/images/icon_telephone.png",
-                            "${phoneNumber}"),
+                            "${user.phoneNumber}"),
                       ],
                     ),
                     SizedBox(
@@ -187,41 +166,13 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => UpdateProfile()),
                             );
                           }),
-                          if (isSender)
-                            makeCardSettings(
-                                "assets/images/logo2.png", "Mes Colies", () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Colies()));
-                            }),
-                          if (isSender)
-                            makeCardSettings("assets/images/icon_search.png",
-                                "Chercher Un Trajet", () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChoisirDestination()));
-                            }),
-                          if (isDeliveryPerson)
-                            makeCardSettings("assets/images/icon_req.png",
-                                "Gérer mes demandes", () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DemandeLivreur()),
-                              );
-                            }),
-                          if (isDeliveryPerson)
-                            makeCardSettings("assets/images/itineraire.png",
-                                "Ajouter un trajet", () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AjouterTrajet()),
-                              );
-                            }),
+                          makeCardSettings("assets/images/users_icon.png",
+                              "Gérer les utilisateurs", () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Users()),
+                            );
+                          }),
                         ],
                       ),
                     ),
